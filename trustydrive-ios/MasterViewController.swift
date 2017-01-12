@@ -28,7 +28,7 @@ class MasterViewController: UITableViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
+        // self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
         super.viewWillAppear(animated)
     }
 
@@ -72,6 +72,8 @@ class MasterViewController: UITableViewController {
 
         let object = objects[indexPath.row] as! NSDate
         cell.textLabel!.text = object.description
+        cell.imageView?.image = UIImage(named: "File")
+        
         return cell
     }
 
@@ -88,7 +90,6 @@ class MasterViewController: UITableViewController {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
     }
-
 
 }
 
