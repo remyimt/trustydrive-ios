@@ -305,7 +305,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Files" id="Zdf-7t-Un8"/>
                     <connections>
-                        <segue destination="6Ta-Vr-cQJ" kind="showDetail" identifier="Settings" id="fm3-p7-kYQ"/>
+                        <segue destination="6Ta-Vr-cQJ" kind="push" identifier="Settings" id="fm3-p7-kYQ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rux-fX-hf1" sceneMemberID="firstResponder"/>
