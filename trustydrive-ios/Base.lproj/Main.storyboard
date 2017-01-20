@@ -285,17 +285,17 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Files" id="Zdf-7t-Un8"/>
                     <connections>
-                        <segue destination="6Ta-Vr-cQJ" kind="show" identifier="Settings" id="fm3-p7-kYQ"/>
+                        <segue destination="6Ta-Vr-cQJ" kind="show" identifier="Settings" id="33H-2z-PJe"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rux-fX-hf1" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1647.2" y="-630.13493253373315"/>
         </scene>
-        <!--View Controller-->
+        <!--Settings View Controller-->
         <scene sceneID="Li0-D2-FP4">
             <objects>
-                <viewController id="6Ta-Vr-cQJ" sceneMemberID="viewController">
+                <viewController id="6Ta-Vr-cQJ" customClass="SettingsViewController" customModule="trustydrive_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="HzO-Kz-SNN"/>
                         <viewControllerLayoutGuide type="bottom" id="uud-II-lvP"/>
@@ -375,6 +375,9 @@
                                         <integer key="value" value="8"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="logoutButtonPressed:" destination="6Ta-Vr-cQJ" eventType="touchUpInside" id="zkv-fy-W4h"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.49203819040000002" blue="0.89487653970000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

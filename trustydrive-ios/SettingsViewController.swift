@@ -2,16 +2,13 @@
 //  SettingsViewController.swift
 //  trustydrive-ios
 //
-//  Created by Tim Rault on 2017-01-12.
+//  Created by Tim Rault on 2017-01-20.
 //  Copyright © 2017 TrustyDrive. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class SettingsViewController: UIViewController {
-    
-    @IBOutlet var logoutButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,4 +32,9 @@ class SettingsViewController: UIViewController {
     }
     */
 
+    @IBAction func logoutButtonPressed(_ sender: Any) {
+        if let navigationController = self.navigationController {
+            navigationController.popToRootViewController(animated: true)
+        }
+    }
 }

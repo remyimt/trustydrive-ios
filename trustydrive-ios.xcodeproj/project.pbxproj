@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D851C1BB1E280E8500E9B1F1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D851C1BA1E280E8500E9B1F1 /* SettingsViewController.swift */; };
+		D85C94971E32A567006128E7 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85C94961E32A567006128E7 /* SettingsViewController.swift */; };
 		D8A032FC1E252E1000AEE624 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A032FB1E252E1000AEE624 /* AppDelegate.swift */; };
 		D8A032FE1E252E1000AEE624 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A032FD1E252E1000AEE624 /* MasterViewController.swift */; };
 		D8A033001E252E1000AEE624 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A032FF1E252E1000AEE624 /* DetailViewController.swift */; };
@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D851C1BA1E280E8500E9B1F1 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		D85C94961E32A567006128E7 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D8A032F81E252E1000AEE624 /* trustydrive-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "trustydrive-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8A032FB1E252E1000AEE624 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8A032FD1E252E1000AEE624 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -61,8 +61,8 @@
 				D8A032FB1E252E1000AEE624 /* AppDelegate.swift */,
 				D8A032FD1E252E1000AEE624 /* MasterViewController.swift */,
 				D8A032FF1E252E1000AEE624 /* DetailViewController.swift */,
+				D85C94961E32A567006128E7 /* SettingsViewController.swift */,
 				D8A033011E252E1000AEE624 /* Main.storyboard */,
-				D851C1BA1E280E8500E9B1F1 /* SettingsViewController.swift */,
 				D8A033041E252E1000AEE624 /* Assets.xcassets */,
 				D8A033061E252E1000AEE624 /* LaunchScreen.storyboard */,
 				D8A033091E252E1000AEE624 /* Info.plist */,
@@ -145,7 +145,7 @@
 				D8A033001E252E1000AEE624 /* DetailViewController.swift in Sources */,
 				D8A032FE1E252E1000AEE624 /* MasterViewController.swift in Sources */,
 				D8A032FC1E252E1000AEE624 /* AppDelegate.swift in Sources */,
-				D851C1BB1E280E8500E9B1F1 /* SettingsViewController.swift in Sources */,
+				D85C94971E32A567006128E7 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
