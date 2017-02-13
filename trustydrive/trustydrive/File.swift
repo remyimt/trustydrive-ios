@@ -25,7 +25,14 @@ class FileStore: NSObject, FileManager {
     func download(file: File, completionHandler: @escaping (String) -> Void) {
         let account = AccountStore.singleton.accounts[0]
         let client = AccountStore.singleton.dropboxClients[account.token]
+        let chunksData = file.chunks!
         
+        var chunks = [[UInt8]]()
+        for chunk in chunksData {
+            //client?.files.download(path: "/" + chunk.name, overwrite: true, destination: <#T##(URL, HTTPURLResponse) -> URL#>)
+        }
+        
+        //Replace with mine
         client?.files.getTemporaryLink(path: file.absolutePath)
             .response { response, error in
                 if let response = response {
@@ -83,6 +90,8 @@ struct Chunk: Glossy {
 
 protocol FileManager {
     func download(file: File, completionHandler: @escaping (String) -> Void)
+    //func upload()
+    //func delete()
 }
 
 struct File: Glossy {

@@ -80,7 +80,7 @@ class AccountStore: NSObject {
             .response{ response, error in
                 if let response = response {
                     if response.entries.count == 0 {
-                        self.createMetadata()
+                        self.createMetadata(password: "")
                     } else {
                         self.fetchMetadata()
                     }
@@ -91,17 +91,19 @@ class AccountStore: NSObject {
         
     }
     
-    func createMetadata() {
+    //TODO Distributed implementation
+    func createMetadata(password: String) {
         FileStore.data.initFiles()
         //Single account implementation
         let account = accounts[0]
         let metadataName = "/metadata.txt"
-        //let metadataName = account.provider.rawValue+account.email+password
+        //let metadataName = (account.provider.rawValue+account.email+password).sha1
         let client = self.dropboxClients[account.token]!
         
         
-        let data = try! JSONSerialization.data(withJSONObject: Root(files: FileStore.data.files!).toJSON()!, options: .prettyPrinted)
+        let data = try! JSONSerialization.data(withJSONObject: Root(files: FileStore.data.files!).toJSON()!, options: [])
         
+        // TODO : replace with mine
         client.files.upload(path: metadataName, input: data)
             .response {response, error in
                 if (response != nil) {
@@ -121,6 +123,7 @@ class AccountStore: NSObject {
         //let metadataName = account.provider.rawValue+account.email+password
         let client = self.dropboxClients[account.token]!
         
+        // Replace with mine
         client.files.download(path: metadataName)
             .response { response, error in
                 if let response = response {

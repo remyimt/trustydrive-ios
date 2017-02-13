@@ -52,8 +52,8 @@ class HomeVC: UIViewController, UITableViewDelegate, QLPreviewControllerDataSour
         
         switch file.type {
         case .file:
-            let vc = self.storyboard!.instantiateViewController(withIdentifier: "FileVC") as! FileVC
-            vc.file = file
+            //let vc = self.storyboard!.instantiateViewController(withIdentifier: "FileVC") as! FileVC
+            //vc.file = file
             //self.navigationController!.pushViewController(vc, animated: true)
             self.preview(file: file)
         case.directory:
@@ -62,8 +62,8 @@ class HomeVC: UIViewController, UITableViewDelegate, QLPreviewControllerDataSour
             vc.files = file.files!
             self.navigationController!.pushViewController(vc, animated: true)
         case.image:
-            let vc = self.storyboard!.instantiateViewController(withIdentifier: "FileVC") as! FileVC
-            vc.file = file
+            //let vc = self.storyboard!.instantiateViewController(withIdentifier: "FileVC") as! FileVC
+            //vc.file = file
             //self.navigationController!.pushViewController(vc, animated: true)
             self.preview(file: file)
         }
