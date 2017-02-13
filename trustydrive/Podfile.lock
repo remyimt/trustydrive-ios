@@ -1,0 +1,21 @@
+PODS:
+  - Alamofire (4.0.1)
+  - Gloss (1.2.0)
+  - IQKeyboardManagerSwift (4.0.8)
+  - SwiftyDropbox (4.1.1):
+    - Alamofire (~> 4.0.1)
+
+DEPENDENCIES:
+  - Gloss
+  - IQKeyboardManagerSwift
+  - SwiftyDropbox
+
+SPEC CHECKSUMS:
+  Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
+  Gloss: ec49584b2e8144e39810b6db6285433316e0c1c7
+  IQKeyboardManagerSwift: c04bc9f68473823f825eb44d958fce98d921bead
+  SwiftyDropbox: dfcd4d308d32d74729255b48833db61acdfb9c23
+
+PODFILE CHECKSUM: db9fe96eb4c6df4119070b4e1106f28725f8bf2d
+
+COCOAPODS: 1.2.0
