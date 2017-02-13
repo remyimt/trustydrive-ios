@@ -38,7 +38,7 @@ struct Account: Glossy {
     
     init?(json: JSON) {
         
-        guard let token: String = "id" <~~ json,
+        guard let token: String = "token" <~~ json,
             let provider: String = "provider" <~~ json,
             let email: String = "email" <~~ json else {
                 return nil
@@ -158,6 +158,11 @@ class AccountStore: NSObject {
                 
                 let token = Account(token: token.accessToken, provider: .dropbox, email: user.email)
                 self.accounts.append(token)
+                
+                let accountsData = try! JSONSerialization.data(withJSONObject: AccountStore.singleton.accounts.toJSONArray()!, options: [])
+                
+                UserDefaults.standard.set(accountsData, forKey: "accounts")
+                UserDefaults.standard.synchronize()
                 
                 if let delegate = self.delegate {
                     delegate.accountsDidChange(accounts: self.accounts)
