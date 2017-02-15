@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyDropbox
 
-class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, AccountStoreDelgate {
+class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, AccountStoreDelgate, LoginDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var passwordTxt: UITextField!
@@ -22,15 +22,16 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
-        passwordTxt.delegate = self
-        AccountStore.singleton.delegate = self
         loadingEmail.hidesWhenStopped = true
         loadingSignIn.hidesWhenStopped = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        tableView.dataSource = self
+        passwordTxt.delegate = self
+        AccountStore.singleton.accountStoreDelegate = self
+        AccountStore.singleton.loginDelegate = self
         self.tableView.reloadData()
     }
 
@@ -46,23 +47,23 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
     
     //TokenStoreDelegate
     
-    func accountWillFetch() {
+    func willFetch() {
         self.loadingEmail.startAnimating()
     }
     
-    func accountsDidChange(accounts: [Account]) {
+    func didChange(accounts: [Account]) {
         self.tableView.reloadData()
         self.loadingEmail.stopAnimating()
         checkButtonState(string: self.passwordTxt.text!)
     }
     
-    func loginWillStart() {
+    func willStart() {
         self.contentView.isHidden = true
         self.verifyingUserView.isHidden = false
         self.loadingSignIn.startAnimating()
     }
     
-    func loginSuccess(result: Bool) {
+    func success(result: Bool) {
         if result {
             super.dismiss(animated: true, completion: nil)
         }

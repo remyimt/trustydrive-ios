@@ -7,45 +7,48 @@
 //
 
 import UIKit
+import QuickLook
 
-class DirectoryVC: UIViewController, UITableViewDelegate {
+class DirectoryVC: UIViewController, FolderRenderer {
     
-    var file: File!
+    //let quickLookController = QLPreviewController()
+    var urls = [NSURL]()
+    var imagePickerHelper: ImagePickerHelper?
+    //var qlFileHelper: QLFileHelper?
+    var file: File?
     var files: [File]!
     var fileTableDataSource: FileTableDS!
     @IBOutlet weak var tableView: UITableView!
+    //var tableViewDelgate: UITableViewDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.register(UINib(nibName: "FileCell", bundle: nil), forCellReuseIdentifier: "FileCell")
         
-        self.navigationItem.title = file.name
+        self.navigationItem.title = file!.name
         
         self.fileTableDataSource = FileTableDS(files: files!)
+        self.fileTableDataSource.delegate = self
         tableView!.dataSource = self.fileTableDataSource
-        tableView!.delegate = self
+        tableView!.delegate = self.fileTableDataSource
+        self.imagePickerHelper = ImagePickerHelper()
         
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let file = files![indexPath.row]
-        
-        switch file.type {
-        case .file:
-            let vc = self.storyboard!.instantiateViewController(withIdentifier: "FileVC") as! FileVC
-            vc.file = file
-            self.navigationController!.pushViewController(vc, animated: true)
-        case .directory:
-            let vc = self.storyboard!.instantiateViewController(withIdentifier: "DirectoryVC") as! DirectoryVC
-            vc.file = file
-            vc.files = file.files!
-            self.navigationController!.pushViewController(vc, animated: true)
-        case .image:
-            let vc = self.storyboard!.instantiateViewController(withIdentifier: "FileVC") as! FileVC
-            vc.file = file
-            self.navigationController!.pushViewController(vc, animated: true)
-        }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
     }
+    
+    @IBAction func addButtonClicked() {
+        self.displayActionSheet()
+    }
+    
+    func getCurrentPath() -> String {
+        let stack = self.navigationController!.viewControllers.map { controller in controller.navigationItem.title! }
+        return stack.joined(separator: "/")
+    }
+    
+    
     
     
 }

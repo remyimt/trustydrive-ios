@@ -12,10 +12,13 @@ import SwiftyDropbox
 typealias JSON = Gloss.JSON
 
 protocol AccountStoreDelgate {
-    func accountWillFetch()
-    func accountsDidChange(accounts: [Account])
-    func loginWillStart()
-    func loginSuccess(result: Bool)
+    func willFetch()
+    func didChange(accounts: [Account])
+}
+
+protocol LoginDelegate {
+    func willStart()
+    func success(result: Bool)
 }
 
 enum Provider: String {
@@ -64,13 +67,14 @@ class AccountStore: NSObject {
     
     var accounts = [Account]()
     var dropboxClients = [String:DropboxClient]()
-    var delegate: AccountStoreDelgate?
+    var accountStoreDelegate: AccountStoreDelgate?
+    var loginDelegate: LoginDelegate?
     
     
     func login(password: String) {
         
         //Single account implemntation
-        delegate?.loginWillStart()
+        self.loginDelegate?.willStart()
         let account = accounts[0]
         //let metadataName = "metadata"
         //let metadataName = account.provider.rawValue+account.email+password
@@ -107,7 +111,7 @@ class AccountStore: NSObject {
         client.files.upload(path: metadataName, input: data)
             .response {response, error in
                 if (response != nil) {
-                    self.delegate?.loginSuccess(result: true)
+                    self.loginDelegate?.success(result: true)
                 } else if let error = error {
                     print(error)
                 }
@@ -135,7 +139,7 @@ class AccountStore: NSObject {
                     
                     FileStore.data.files = root.files
                     
-                    self.delegate?.loginSuccess(result: true)
+                    self.loginDelegate?.success(result: true)
                 } else if let error = error {
                     print(error)
                 }
@@ -146,7 +150,7 @@ class AccountStore: NSObject {
     func saveDropboxToken(token: DropboxAccessToken) {
         
         let client = DropboxClient(accessToken: token.accessToken)
-        delegate?.accountWillFetch()
+        self.accountStoreDelegate?.willFetch()
         
         client.users.getCurrentAccount()
             .response { user, error in
@@ -164,8 +168,8 @@ class AccountStore: NSObject {
                 UserDefaults.standard.set(accountsData, forKey: "accounts")
                 UserDefaults.standard.synchronize()
                 
-                if let delegate = self.delegate {
-                    delegate.accountsDidChange(accounts: self.accounts)
+                if let delegate = self.accountStoreDelegate {
+                    delegate.didChange(accounts: self.accounts)
                 }
         }
         

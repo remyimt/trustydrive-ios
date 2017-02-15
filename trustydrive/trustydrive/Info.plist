@@ -51,6 +51,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>$(PRODUCT_NAME) needs access to use your photo library</string>
 </dict>
 </plist>

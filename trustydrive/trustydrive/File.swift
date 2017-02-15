@@ -78,6 +78,87 @@ class FileStore: NSObject, FileManager {
         
         //Replace with mine
     }
+    
+    func remove(absolutePath: String)-> File? {
+        var path = absolutePath.components(separatedBy: "/")
+        path.removeFirst()
+        
+        let currentPath = path[0]
+        
+        //Get the matching current directory
+        let index = self.files?.index { file in
+            print("File Name: "+file.name)
+            print("Current Path: "+currentPath)
+            return file.name == currentPath
+        }
+        
+        if let index = index {
+            if path.count == 1 {
+                return self.files?.remove(at: index)
+            } else {
+                path.removeFirst()
+                return self.files?[index].removeFile(absolutePath: path)
+            }
+        } else {
+            return nil
+        }
+    }
+    
+    func mkdir(name: String, absolutePath: String)->File? {
+        var path = absolutePath.components(separatedBy: "/")
+        path.removeFirst()
+        
+        let currentPath = path[0]
+        
+        if path.count == 1 {
+            let file = File(name: name, type: .directory, chunks: nil, absolutePath: absolutePath, uploadDate: Date().timeIntervalSince1970*1000, size: nil, files: [])
+            self.files?.append(file)
+            return file
+        } else {
+            let index = self.files?.index { file in
+                print("File Name: "+file.name)
+                print("Current Path: "+currentPath)
+                return file.name == currentPath
+            }
+            
+            if let index = index {
+                path.removeFirst()
+                return self.files?[index].mkdir(name: name, pathArray: path, absolutePath: absolutePath)
+            } else {
+                return nil
+            }
+        }
+
+    }
+    
+    func rename(newName: String, absolutePath: String, newAbsolutePath: String)->Bool {
+        var path = absolutePath.components(separatedBy: "/")
+        path.removeFirst()
+        
+        let currentPath = path[0]
+        
+        let index = self.files?.index { file in
+            print("File Name: "+file.name)
+            print("Current Path: "+currentPath)
+            return file.name == currentPath
+        }
+        
+        if let index = index {
+            
+            if path.count == 1 && self.files?[index].name == path[0]{
+                self.files?[index].name = newName
+                self.files?[index].absolutePath = newAbsolutePath
+                return true
+            } else {
+                path.removeFirst()
+                //return self.files?[index].rename(newName: newName, pathArray: path)
+                return false
+            }
+        } else {
+            return false
+        }
+
+    }
 }
 
 struct Root: Glossy {
@@ -144,6 +225,16 @@ struct File: Glossy {
         case image = "image"
     }
     
+    init(name: String, type: FileType, chunks: [Chunk]?, absolutePath: String, uploadDate: Double, size: Int?, files: [File]?) {
+        self.name = name
+        self.type = type
+        self.chunks = chunks
+        self.absolutePath = absolutePath
+        self.uploadDate = uploadDate
+        self.size = size
+        self.files = files
+    }
+    
     init?(json: JSON) {
         guard let name: String = "name" <~~ json,
             let type: String = "type" <~~ json,
@@ -177,4 +268,85 @@ struct File: Glossy {
             "files" ~~> self.files,
             ])
     }
+    
+    mutating func removeFile(absolutePath: [String])-> File? {
+        
+        var path = absolutePath
+        let currentPath = path[0]
+        
+        //Get the matching current directory
+        let index = self.files?.index { file in
+            print("File Name: "+file.name)
+            print("Current Path: "+currentPath)
+            return file.name == currentPath
+        }
+        
+        if let index = index {
+            if path.count == 1 {
+                return self.files?.remove(at: index)
+            } else {
+                path.removeFirst()
+                return self.files?[index].removeFile(absolutePath: path)
+            }
+        } else {
+            return nil
+        }
+    }
+    
+    mutating func mkdir(name: String, pathArray: [String], absolutePath: String)-> File? {
+        var pathArray = pathArray
+        let currentPath = pathArray[0]
+        
+        if pathArray.count == 1 {
+            let file = File(name: name, type: .directory, chunks: nil, absolutePath: absolutePath, uploadDate: Date().timeIntervalSince1970*1000, size: nil, files: [])
+            self.files?.append(file)
+            return file
+        } else {
+            let index = self.files?.index { file in
+                print("File Name: "+file.name)
+                print("Current Path: "+currentPath)
+                return file.name == currentPath
+            }
+            
+            if let index = index {
+                pathArray.removeFirst()
+                return self.files?[index].mkdir(name: name, pathArray: pathArray, absolutePath: absolutePath)
+            } else {
+                return nil
+            }
+        }
+
+    }
+    
+    mutating func rename(newName: String, pathArray: [String])-> Bool {
+        var path = pathArray
+        let currentPath = path[0]
+        
+        let index = self.files?.index { file in
+            print("File Name: "+file.name)
+            print("Current Path: "+currentPath)
+            return file.name == currentPath
+        }
+        
+        if let index = index {
+            
+            if path.count == 1 && self.files?[index].name == path[0]{
+                self.files?[index].name = newName
+                self.files?[index].renameInAbsolutePath(oldName: path[0], newName: newName)
+                return true
+            } else {
+                path.removeFirst()
+                //return self.files?[index].rename(newName: newName, pathArray: path)
+                return false
+            }
+        } else {
+            return false
+        }
+
+    }
+    
+    mutating func renameInAbsolutePath(oldName: String, newName: String) {
+        //self.absolutePath.replace
+    }
+    
 }
