@@ -9,5 +9,6 @@ target 'trustydrive' do
   pod 'SwiftyDropbox'
   pod 'Gloss'
   pod 'IQKeyboardManagerSwift'
+  pod 'CryptoSwift'
 
 end

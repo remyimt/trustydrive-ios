@@ -8,6 +8,7 @@
 
 import Gloss
 import SwiftyDropbox
+import CryptoSwift
 
 typealias JSON = Gloss.JSON
 
@@ -76,8 +77,8 @@ class AccountStore: NSObject {
         //Single account implemntation
         self.loginDelegate?.willStart()
         let account = accounts[0]
-        //let metadataName = "metadata"
-        //let metadataName = account.provider.rawValue+account.email+password
+        let metadataName = "metadata"
+        //let metadataName = (account.provider.rawValue+account.email+password).sha1
         let client = self.dropboxClients[account.token]
         
         client!.files.listFolder(path: "")
@@ -124,7 +125,7 @@ class AccountStore: NSObject {
         //Single account implmentation
         let account = accounts[0]
         let metadataName = "/metadata.txt"
-        //let metadataName = account.provider.rawValue+account.email+password
+        //let metadataName = (account.provider.rawValue+account.email+password).sha1
         let client = self.dropboxClients[account.token]!
         
         // Replace with mine
