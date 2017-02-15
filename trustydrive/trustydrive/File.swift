@@ -76,7 +76,6 @@ class FileStore: NSObject, FileManager {
             
         }
         
-        //Replace with mine
     }
     
     func remove(absolutePath: String)-> File? {

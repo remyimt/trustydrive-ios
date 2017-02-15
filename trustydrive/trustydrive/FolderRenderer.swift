@@ -31,6 +31,7 @@ protocol FolderRenderer: UITableViewDelegate {
 extension FolderRenderer where Self: UIViewController {
     
     func preview(file: File) {
+        displayLoadingAction(message: "Downloading file from TrustyDrive...")
         FileStore.data.download(file: file) { url in
             let urls = [url as NSURL]
             let qlFileHelper = QLFileHelper()
@@ -38,8 +39,22 @@ extension FolderRenderer where Self: UIViewController {
             let quickLookController = QLPreviewController()
             quickLookController.dataSource = qlFileHelper
             quickLookController.reloadData()
+            self.dismiss(animated: true, completion: nil)
             self.navigationController?.pushViewController(quickLookController, animated: true)
         }
+    }
+    
+    func displayLoadingAction(message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        
+        alert.view.tintColor = UIColor.black
+        let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50)) as UIActivityIndicatorView
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        loadingIndicator.startAnimating();
+        
+        alert.view.addSubview(loadingIndicator)
+        present(alert, animated: true, completion: nil)
     }
     
     func openDirectory(file: File) {
