@@ -77,7 +77,7 @@ class AccountStore: NSObject {
         //Single account implemntation
         self.loginDelegate?.willStart()
         let account = accounts[0]
-        let metadataName = "metadata"
+        //let metadataName = "metadata"
         //let metadataName = (account.provider.rawValue+account.email+password).sha1
         let client = self.dropboxClients[account.token]
         
