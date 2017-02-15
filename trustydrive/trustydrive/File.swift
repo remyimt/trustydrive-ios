@@ -22,26 +22,61 @@ class FileStore: NSObject, FileManager {
         self.files = [File]()
     }
     
-    func download(file: File, completionHandler: @escaping (String) -> Void) {
+    func download(file: File, completionHandler: @escaping (URL) -> Void) {
         let account = AccountStore.singleton.accounts[0]
         let client = AccountStore.singleton.dropboxClients[account.token]
+        let numberOfProviders = AccountStore.singleton.accounts.count
         let chunksData = file.chunks!
         
-        var chunks = [[UInt8]]()
+        let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
+        let group = DispatchGroup()
+        
+        // Download the chunks composing the file from the cloud providers (only Dropbox so far)
+        var chunks = [[UInt8]](repeating: [UInt8](), count: chunksData.count)
         for chunk in chunksData {
-            //client?.files.download(path: "/" + chunk.name, overwrite: true, destination: <#T##(URL, HTTPURLResponse) -> URL#>)
+            group.enter()
+            client!.files.download(path: "/" + chunk.name).response(queue: queue) { response, error in
+                if let (_, data) = response {
+                    chunks[chunksData.index(where: { (Chunk) -> Bool in
+                        Chunk.name == chunk.name
+                    })!] = [UInt8](data)
+                }
+                else if let error = error {
+                    print(error)
+                }
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: queue) {
+            let blockSize = chunks[0].count
+            let downloadDestination = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(file.name.components(separatedBy: ".")[0]).appendingPathExtension(file.name.components(separatedBy: ".")[1])
+            let fileToDownload = OutputStream(url: downloadDestination, append: false)
+            fileToDownload?.open()
+            
+            // Distribute the bytes, to generate the file out of the chunks
+            var tempB = [UInt8](repeating: 0, count: 1) // Initialize the temporary buffer
+            for i in stride(from: 0, to: chunks.count - numberOfProviders, by: numberOfProviders) {
+                for j in 0...(blockSize*numberOfProviders - 1) {
+                    tempB[0] = chunks[i + j % numberOfProviders][(j - (j % numberOfProviders))/numberOfProviders]
+                    fileToDownload?.write(&tempB, maxLength: 1)
+                }
+            }
+            let remainingBytes = file.size! - blockSize*(chunks.count-numberOfProviders)
+            for j in 0...remainingBytes - 1 { // Distribute the bytes contained in the incomplete chunks
+                tempB[0] = chunks[chunks.count-numberOfProviders + j % numberOfProviders][(j - (j % numberOfProviders))/numberOfProviders]
+                fileToDownload?.write(&tempB, maxLength: 1)
+            }
+            
+            fileToDownload?.close()
+            
+            DispatchQueue.main.async {
+                completionHandler(downloadDestination)
+            }
+            
         }
         
         //Replace with mine
-        client?.files.getTemporaryLink(path: file.absolutePath)
-            .response { response, error in
-                if let response = response {
-                    print(response.link)
-                    completionHandler(response.link) // The link to the file in disk, as NSURL
-                } else if let error = error {
-                    print(error)
-                }
-        }
     }
 }
 
@@ -89,7 +124,7 @@ struct Chunk: Glossy {
 }
 
 protocol FileManager {
-    func download(file: File, completionHandler: @escaping (String) -> Void)
+    func download(file: File, completionHandler: @escaping (URL) -> Void)
     //func upload()
     //func delete()
 }

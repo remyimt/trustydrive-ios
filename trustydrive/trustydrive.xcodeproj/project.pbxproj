@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8BF9ECE11AF8E3937C5EF55B /* Pods_modal_experiment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E84DF6B9068583A6E5367DC8 /* Pods_modal_experiment.framework */; };
+		94563D255F2BE8F02C65AB0A /* Pods_trustydrive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DFC89079364A5689FB98E /* Pods_trustydrive.framework */; };
 		9E13F28C1E51FE3800CDB143 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E13F27E1E51FE3800CDB143 /* Assets.xcassets */; };
 		9E13F28F1E51FE3800CDB143 /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2821E51FE3800CDB143 /* AccountStore.swift */; };
 		9E13F2901E51FE3800CDB143 /* AddAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2831E51FE3800CDB143 /* AddAccountVC.swift */; };
@@ -24,8 +24,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		076DFC89079364A5689FB98E /* Pods_trustydrive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_trustydrive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		08DA3B4F2D1959DB05FBBAAD /* Pods-modal-experiment.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-modal-experiment.release.xcconfig"; path = "Pods/Target Support Files/Pods-modal-experiment/Pods-modal-experiment.release.xcconfig"; sourceTree = "<group>"; };
 		25358CFD216E99933BAFC4DA /* Pods-modal-experiment.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-modal-experiment.debug.xcconfig"; path = "Pods/Target Support Files/Pods-modal-experiment/Pods-modal-experiment.debug.xcconfig"; sourceTree = "<group>"; };
+		4741E7FF851E2917F6B5A5EF /* Pods-trustydrive.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trustydrive.debug.xcconfig"; path = "Pods/Target Support Files/Pods-trustydrive/Pods-trustydrive.debug.xcconfig"; sourceTree = "<group>"; };
 		9E13F27E1E51FE3800CDB143 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = trustydrive/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		9E13F2801E51FE3800CDB143 /* trustydrive.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = trustydrive.entitlements; path = trustydrive/trustydrive.entitlements; sourceTree = SOURCE_ROOT; };
 		9E13F2811E51FE3800CDB143 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = trustydrive/Info.plist; sourceTree = SOURCE_ROOT; };
@@ -42,7 +44,7 @@
 		9E4D6EB31E520911006BBAEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9E4D6EB51E520911006BBAEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9E6667D21E479786008AA478 /* trustydrive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = trustydrive.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E84DF6B9068583A6E5367DC8 /* Pods_modal_experiment.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_modal_experiment.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC5CEF9FED95D2332E076850 /* Pods-trustydrive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trustydrive.release.xcconfig"; path = "Pods/Target Support Files/Pods-trustydrive/Pods-trustydrive.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,7 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BF9ECE11AF8E3937C5EF55B /* Pods_modal_experiment.framework in Frameworks */,
+				94563D255F2BE8F02C65AB0A /* Pods_trustydrive.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,7 +62,7 @@
 		1F869B85E03CC3B1DEA5BAF4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E84DF6B9068583A6E5367DC8 /* Pods_modal_experiment.framework */,
+				076DFC89079364A5689FB98E /* Pods_trustydrive.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -70,6 +72,8 @@
 			children = (
 				25358CFD216E99933BAFC4DA /* Pods-modal-experiment.debug.xcconfig */,
 				08DA3B4F2D1959DB05FBBAAD /* Pods-modal-experiment.release.xcconfig */,
+				4741E7FF851E2917F6B5A5EF /* Pods-trustydrive.debug.xcconfig */,
+				EC5CEF9FED95D2332E076850 /* Pods-trustydrive.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -203,7 +207,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-modal-experiment/Pods-modal-experiment-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-trustydrive/Pods-trustydrive-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		1633D7327783628337F40985 /* [CP] Embed Pods Frameworks */ = {
@@ -218,7 +222,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-modal-experiment/Pods-modal-experiment-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-trustydrive/Pods-trustydrive-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CAC213AFABCC445BD4B45E34 /* [CP] Check Pods Manifest.lock */ = {
@@ -371,8 +375,9 @@
 		};
 		9E6667E51E479786008AA478 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 25358CFD216E99933BAFC4DA /* Pods-modal-experiment.debug.xcconfig */;
+			baseConfigurationReference = 4741E7FF851E2917F6B5A5EF /* Pods-trustydrive.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = NHM7Y8WJUG;
 				INFOPLIST_FILE = trustydrive/Info.plist;
@@ -385,8 +390,9 @@
 		};
 		9E6667E61E479786008AA478 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 08DA3B4F2D1959DB05FBBAAD /* Pods-modal-experiment.release.xcconfig */;
+			baseConfigurationReference = EC5CEF9FED95D2332E076850 /* Pods-trustydrive.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = NHM7Y8WJUG;
 				INFOPLIST_FILE = trustydrive/Info.plist;

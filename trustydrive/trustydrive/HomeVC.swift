@@ -71,8 +71,8 @@ class HomeVC: UIViewController, UITableViewDelegate, QLPreviewControllerDataSour
     }
     
     func preview(file: File) {
-        FileStore.data.download(file: file) { link in
-            self.urls.append(NSURL(string: link)!)
+        FileStore.data.download(file: file) { url in
+            self.urls.append(url as NSURL)
             self.quickLookController.dataSource = self
             self.quickLookController.reloadData()
             self.navigationController?.pushViewController(self.quickLookController, animated: true)

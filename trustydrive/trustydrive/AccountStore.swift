@@ -152,7 +152,7 @@ class AccountStore: NSObject {
             .response { user, error in
                 guard let user = user else {
                     print("ERROR: Unable to obtain user email address")
-                    print(error)
+                    print(error!)
                     return
                 }
                 
