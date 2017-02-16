@@ -181,7 +181,7 @@ struct Root: Glossy {
 
 
 
-struct Chunk: Glossy {
+struct Chunk: Glossy, Equatable {
     let account: Account
     let name: String
     
@@ -201,6 +201,10 @@ struct Chunk: Glossy {
             "name" ~~> self.name
             ])
     }
+    
+    static func ==(lhs: Chunk, rhs: Chunk)->Bool {
+        return lhs.account == rhs.account && lhs.name == rhs.name
+    }
 }
 
 protocol FileManager {
@@ -209,7 +213,7 @@ protocol FileManager {
     //func delete()
 }
 
-struct File: Glossy {
+struct File: Glossy, Equatable {
     var name: String
     let type: FileType
     var chunks: [Chunk]?
@@ -266,6 +270,28 @@ struct File: Glossy {
             "size" ~~> self.size,
             "files" ~~> self.files,
             ])
+    }
+    
+    static func ==(lhs:File, rhs:File) ->Bool {
+        
+        
+        if lhs.type == .file && rhs.type == .file {
+            if let lhschunks = lhs.chunks,
+                let rhschunks = rhs.chunks,
+                let lhssize = lhs.size,
+                let rhssize = rhs.size{
+                return lhs.name == rhs.name && lhs.type == rhs.type  &&
+                    lhs.uploadDate == rhs.uploadDate && lhssize == rhssize && lhschunks == rhschunks
+            }
+        } else if lhs.type == .directory && rhs.type == .directory {
+            if let lhsfiles = lhs.files,
+                let rhsfiles = rhs.files {
+                return lhsfiles == rhsfiles
+            }
+        }
+        
+        return false
+        
     }
     
     mutating func removeFile(absolutePath: [String])-> File? {

@@ -28,7 +28,7 @@ enum Provider: String {
     case drive = "Google Drive"
 }
 
-struct Account: Glossy {
+struct Account: Glossy, Equatable {
     let token: String
     let provider: Provider
     let email: String
@@ -59,6 +59,10 @@ struct Account: Glossy {
             "provider" ~~> self.provider,
             "token" ~~> self.token
             ])
+    }
+    
+    static func ==(lhs: Account, rhs: Account)-> Bool {
+        return lhs.token == rhs.token && lhs.provider == rhs.provider
     }
 }
 

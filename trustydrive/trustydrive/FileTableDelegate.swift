@@ -51,8 +51,10 @@ class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
+        let file = self.files[indexPath.row]
+        
         let moreAction = UITableViewRowAction(style: .default, title: "More") { action, indexPath in
-            self.delegate?.displayMore()
+            self.delegate?.displayMore(file: file)
         }
         moreAction.backgroundColor = UIColor(red: 212.0/255.0, green: 212/255.0, blue: 212.0/255.0, alpha: 1)
         
