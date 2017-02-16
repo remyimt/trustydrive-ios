@@ -77,8 +77,8 @@ class AccountStore: NSObject {
         //Single account implemntation
         self.loginDelegate?.willStart()
         let account = accounts[0]
-        let metadataName = "metadata"
-        //let metadataName = (account.provider.rawValue+account.email+password).sha1
+        //let metadataName = "metadata"
+        //let metadataName = (account.provider.rawValue+account.email+password).sha1()
         let client = self.dropboxClients[account.token]
         
         client!.files.listFolder(path: "")
@@ -96,26 +96,40 @@ class AccountStore: NSObject {
         
     }
     
-    //TODO Distributed implementation
     func createMetadata(password: String) {
         FileStore.data.initFiles()
-        //Single account implementation
-        let account = accounts[0]
-        let metadataName = "/metadata.txt"
-        //let metadataName = (account.provider.rawValue+account.email+password).sha1
-        let client = self.dropboxClients[account.token]!
         
+        let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
+        let group = DispatchGroup()
         
         let data = try! JSONSerialization.data(withJSONObject: Root(files: FileStore.data.files!).toJSON()!, options: [])
+        let metadataArray = [UInt8](data)
         
-        // TODO : replace with mine
-        client.files.upload(path: metadataName, input: data)
-            .response {response, error in
-                if (response != nil) {
-                    self.loginDelegate?.success(result: true)
-                } else if let error = error {
-                    print(error)
-                }
+        // Initialize one buffer per provider
+        var buffers = [[UInt8]]()
+        for _ in accounts {
+            buffers.append([UInt8]())
+        }
+        
+        // Distribute the bytes within the buffers
+        for i in 0...metadataArray.count - 1 {
+            buffers[i % accounts.count].append(metadataArray[i])
+        }
+        
+        // Turn the buffers into files and upload them to the Dropbox accounts
+        for buffer in buffers {
+            group.enter()
+            let bufferIndex = buffers.index(where: { (Buffer) -> Bool in
+                Buffer == buffer
+            })!
+            let chunk = Data(bytes: buffer)
+            let metadataName = (accounts[bufferIndex].provider.rawValue+accounts[bufferIndex].email+password).sha1()
+            dropboxClients[accounts[bufferIndex].token]?.files.upload(path: "/" + metadataName, input: chunk)
+            group.leave()
+        }
+        
+        group.notify(queue: queue) {
+            self.loginDelegate?.success(result: true)
         }
         
     }
