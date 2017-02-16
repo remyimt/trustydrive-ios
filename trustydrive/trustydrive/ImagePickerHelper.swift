@@ -10,16 +10,18 @@ import UIKit
 import Photos
 
 class ImagePickerHelper: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    var delegate: FolderRenderer!
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let info = info[UIImagePickerControllerReferenceURL], let url = info as? URL {
             let fetchResult = PHAsset.fetchAssets(withALAssetURLs: [url], options: nil)
             if let photo = fetchResult.firstObject {
-                
                 PHImageManager.default().requestImageData(for: photo, options: nil) { (data, _, _,info) in
                     if let data = data,
                         let fileName = (info?["PHImageFileURLKey"] as? URL)?.lastPathComponent {
                         picker.dismiss(animated: true, completion: nil)
-                        FileStore.data.upload(fileData: data, fileName: fileName) {file in print(file)}
+                        self.delegate.didChoosePhoto(fileData: data, fileName: fileName)
                     }
                 }
             }

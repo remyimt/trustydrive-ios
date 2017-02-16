@@ -27,6 +27,7 @@ protocol FolderRenderer: UITableViewDelegate {
     func displayLoadingAction(message: String)
     func getCurrentPath() -> String
     func dismissLoadingAction()
+    func didChoosePhoto(fileData: Data, fileName: String)
     //var tableViewDelgate: UITableViewDelegate? {get set}
 }
 
@@ -92,6 +93,7 @@ extension FolderRenderer where Self: UIViewController {
         
         let fromCameraRollAction = UIAlertAction(title: "From camera roll", style: .default) { action in
             self.imagePickerHelper = ImagePickerHelper()
+            self.imagePickerHelper!.delegate = self
             
             let imagePickerController = UIImagePickerController()
             imagePickerController.sourceType = .photoLibrary
@@ -182,6 +184,8 @@ extension FolderRenderer where Self: UIViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    
+    
     func getCurrentPath() -> String {
         let stack = self.navigationController!.viewControllers.map { controller in controller.navigationItem.title! }
         return stack.joined(separator: "/")
@@ -190,5 +194,24 @@ extension FolderRenderer where Self: UIViewController {
     func dismissLoadingAction() {
         self.dismiss(animated: true, completion: nil)
     }
+    
+    func didChoosePhoto(fileData: Data, fileName: String) {
+        self.displayLoadingAction(message: "Uploading photo to TrustyDrive..")
+        FileStore.data.upload(fileData: fileData, fileName: fileName) {file in
+            if FileStore.data.addFile(file: file, absolutePath: self.getCurrentPath()) {
+                AccountStore.singleton.uploadMetadata {
+                    self.dismissLoadingAction()
+                    self.files.append(file)
+                    self.fileTableDataSource.files.append(file)
+                    self.tableView.beginUpdates()
+                    self.tableView.insertRows(at: [IndexPath(row: self.files.count-1, section: 0)], with: .automatic)
+                    self.tableView.endUpdates()
+                    self.dismissLoadingAction()
+                }
+            }
+        }
+
+    }
+
     
 }
