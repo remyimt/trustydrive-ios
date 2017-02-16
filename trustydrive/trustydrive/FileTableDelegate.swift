@@ -70,8 +70,13 @@ class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
             let path: String = self.delegate!.getCurrentPath()
             
             if let _ = FileStore.data.remove(absolutePath: "\(path)/\(file.name)") {
-                self.files.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
+                self.delegate!.displayLoadingAction(message: "Deleting file..")
+                AccountStore.singleton.uploadMetadata {
+                    self.files.remove(at: indexPath.row)
+                    self.delegate!.files.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                    self.delegate!.dismissLoadingAction()
+                }
             }
         }
         
