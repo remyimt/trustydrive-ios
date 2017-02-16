@@ -96,17 +96,27 @@ class AccountStore: NSObject {
         }
         
         group.notify(queue: queue) {
+            for i in 0...self.accounts.count - 1 {
+                self.accounts[i].metadataName = (self.accounts[i].provider.rawValue+self.accounts[i].email+password).sha1()
+            }
+            
             if trustyDriveAccountIsBrandNew {
-                self.createMetadata(password: password)
+                self.createMetadata()
             }
             else {
-                self.fetchMetadata(password: password)
+                self.fetchMetadata()
             }
         }
     }
     
-    func createMetadata(password: String) {
+    func createMetadata() {
         FileStore.data.initFiles()
+        self.uploadMetadata() {
+            self.loginDelegate?.success(result: true)
+        }
+    }
+    
+    func uploadMetadata(completionHandler: @escaping ()->Void) {
         
         let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
         let group = DispatchGroup()
@@ -132,18 +142,20 @@ class AccountStore: NSObject {
                 Buffer == buffer
             })!
             let chunk = Data(bytes: buffer)
-            let metadataName = (accounts[bufferIndex].provider.rawValue+accounts[bufferIndex].email+password).sha1()
-            dropboxClients[accounts[bufferIndex].token]?.files.upload(path: "/" + metadataName, clientModified: Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7)))), input: chunk)
+            dropboxClients[accounts[bufferIndex].token]?.files.upload(path: "/" + self.accounts[bufferIndex].metadataName!, clientModified: Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7)))), input: chunk)
             group.leave()
         }
         
         group.notify(queue: queue) {
-            self.loginDelegate?.success(result: true)
+            
+            DispatchQueue.main.async {
+                completionHandler()
+            }
         }
         
     }
     
-    func fetchMetadata(password: String) {
+    func fetchMetadata() {
         
         let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
         let group = DispatchGroup()
@@ -152,11 +164,10 @@ class AccountStore: NSObject {
         var chunks = [[UInt8]](repeating: [UInt8](), count: self.accounts.count)
         for account in self.accounts {
             group.enter()
-            let metadataName = (account.provider.rawValue+account.email+password).sha1() // Get the name of the file to download
             let accountIndex = self.accounts.index(where: { (Account) -> Bool in
                 Account.token == account.token
             })!
-            dropboxClients[account.token]?.files.download(path: "/" + metadataName)
+            dropboxClients[account.token]?.files.download(path: "/" + account.metadataName!)
                 .response(queue: queue) { response, error in
                     if let (_, data) = response {
                         chunks[accountIndex] = [UInt8](data)
