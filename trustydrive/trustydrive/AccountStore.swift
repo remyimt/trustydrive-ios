@@ -73,27 +73,36 @@ class AccountStore: NSObject {
     
     
     func login(password: String) {
-        
-        //Single account implemntation
         self.loginDelegate?.willStart()
-        let account = accounts[0]
-        //let metadataName = "metadata"
-        //let metadataName = (account.provider.rawValue+account.email+password).sha1()
-        let client = self.dropboxClients[account.token]
         
-        client!.files.listFolder(path: "")
-            .response{ response, error in
-                if let response = response {
-                    if response.entries.count == 0 {
-                        self.createMetadata(password: "")
-                    } else {
-                        self.fetchMetadata()
+        let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
+        let group = DispatchGroup()
+        
+        var trustyDriveAccountIsBrandNew = true
+        for account in accounts {
+            group.enter()
+            dropboxClients[account.token]?.files.listFolder(path: "")
+                .response { response, error in
+                    if let response = response {
+                        if response.entries.count > 0 {
+                            trustyDriveAccountIsBrandNew = false
+                        }
                     }
-                } else if let error = error {
-                    print(error)
-                }
+                    else if let error = error {
+                        print(error)
+                    }
+                    group.leave()
+            }
         }
         
+        group.notify(queue: queue) {
+            if trustyDriveAccountIsBrandNew {
+                self.createMetadata(password: password)
+            }
+            else {
+                self.fetchMetadata()
+            }
+        }
     }
     
     func createMetadata(password: String) {
@@ -124,7 +133,7 @@ class AccountStore: NSObject {
             })!
             let chunk = Data(bytes: buffer)
             let metadataName = (accounts[bufferIndex].provider.rawValue+accounts[bufferIndex].email+password).sha1()
-            dropboxClients[accounts[bufferIndex].token]?.files.upload(path: "/" + metadataName, input: chunk)
+            dropboxClients[accounts[bufferIndex].token]?.files.upload(path: "/" + metadataName, clientModified: Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7)))), input: chunk)
             group.leave()
         }
         
