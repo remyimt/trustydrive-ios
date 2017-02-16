@@ -23,8 +23,6 @@ class FileStore: NSObject, FileManager {
     }
     
     func download(file: File, completionHandler: @escaping (URL) -> Void) {
-        let account = AccountStore.singleton.accounts[0]
-        let client = AccountStore.singleton.dropboxClients[account.token]
         let numberOfProviders = AccountStore.singleton.accounts.count
         let chunksData = file.chunks!
         
@@ -35,8 +33,8 @@ class FileStore: NSObject, FileManager {
         var chunks = [[UInt8]](repeating: [UInt8](), count: chunksData.count)
         for chunk in chunksData {
             group.enter()
-            //let client = AccountStore.singleton.dropboxClients[chunk.account.token]!
-            client!.files.download(path: "/" + chunk.name).response(queue: queue) { response, error in
+            let client = AccountStore.singleton.dropboxClients[chunk.account.token]!
+            client.files.download(path: "/" + chunk.name).response(queue: queue) { response, error in
                 if let (_, data) = response {
                     chunks[chunksData.index(where: { (Chunk) -> Bool in
                         Chunk.name == chunk.name
@@ -77,6 +75,56 @@ class FileStore: NSObject, FileManager {
             
         }
         
+    }
+    
+    func upload(fileData: Data, fileName: String, completionHandler: @escaping (File)->Void) {
+        let blockSize = 500000 // 500kb blocks to chop the files
+        let numberOfProviders = AccountStore.singleton.accounts.count
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let fileToUpload = InputStream(data: fileData)
+            fileToUpload.open()
+            
+            // Initialize one buffer per provider
+            var buffers = [[UInt8]]()
+            for _ in 0...numberOfProviders - 1 {
+                buffers.append([UInt8](repeating: 0, count: blockSize))
+            }
+            
+            var uploadedFile: File = File(name: fileName, type: .file, chunks: [], absolutePath: "", uploadDate: Date().timeIntervalSince1970, size: fileData.count, files: nil)
+            
+            // Fill up the buffers reading the file byte per byte and sending them to Dropbox when the size reaches blockSize. Incomplete buffers will be filled with 0 to reach blockSize
+            var tempB = [UInt8](repeating: 0, count: 1)
+            while fileToUpload.hasBytesAvailable {
+                for i in 0...(blockSize*numberOfProviders - 1) { // Fill up the numberOfProviders buffers
+                    fileToUpload.read(&tempB, maxLength: 1)
+                    buffers[i%numberOfProviders][(i - (i % numberOfProviders))/numberOfProviders] = tempB[0]
+                }
+                for i in 0...numberOfProviders - 1 { // Turn the buffers into blocks and upload them now that they have reached the blockSize
+                    let bufferData = Data(bytes: buffers[i%numberOfProviders])
+                    let chunkName = self.generateRandomHash(length: 40)
+                    let client = AccountStore.singleton.dropboxClients[AccountStore.singleton.accounts[i%numberOfProviders].token]!
+                    let randomDate = Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7))))
+                    client.files.upload(path: "/" + chunkName, clientModified: randomDate, input: bufferData)
+                    uploadedFile.chunks?.append(Chunk(account: AccountStore.singleton.accounts[i%numberOfProviders], name: chunkName))
+                }
+            }
+            
+            fileToUpload.close()
+            
+            DispatchQueue.main.async {
+                completionHandler(uploadedFile)
+            }
+        }
+        
+    }
+    
+    func generateRandomHash(length:Int) -> String {
+        var randomHash:String = ""
+        for _ in 0...length-1 {
+            randomHash += String(format: "%x", arc4random_uniform(16))
+        }
+        return randomHash
     }
     
     func remove(absolutePath: String)-> File? {
@@ -128,7 +176,7 @@ class FileStore: NSObject, FileManager {
                 return nil
             }
         }
-
+        
     }
     
     func rename(newName: String, absolutePath: String, newAbsolutePath: String)->Bool {
@@ -157,7 +205,7 @@ class FileStore: NSObject, FileManager {
         } else {
             return false
         }
-
+        
     }
 }
 
@@ -196,6 +244,11 @@ struct Chunk: Glossy, Equatable {
         self.name = name
     }
     
+    init(account: Account, name: String) {
+        self.account = account
+        self.name = name
+    }
+    
     func toJSON() -> JSON? {
         return jsonify([
             "account" ~~> self.account,
@@ -210,7 +263,7 @@ struct Chunk: Glossy, Equatable {
 
 protocol FileManager {
     func download(file: File, completionHandler: @escaping (URL) -> Void)
-    //func upload()
+    func upload(fileData: Data, fileName: String, completionHandler: @escaping (File)->Void)
     //func delete()
 }
 
@@ -341,7 +394,7 @@ struct File: Glossy, Equatable {
                 return nil
             }
         }
-
+        
     }
     
     mutating func rename(newName: String, pathArray: [String])-> Bool {
@@ -368,7 +421,7 @@ struct File: Glossy, Equatable {
         } else {
             return false
         }
-
+        
     }
     
     mutating func renameInAbsolutePath(oldName: String, newName: String) {

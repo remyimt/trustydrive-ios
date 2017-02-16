@@ -14,10 +14,12 @@ class ImagePickerHelper: NSObject, UIImagePickerControllerDelegate, UINavigation
         if let info = info[UIImagePickerControllerReferenceURL], let url = info as? URL {
             let fetchResult = PHAsset.fetchAssets(withALAssetURLs: [url], options: nil)
             if let photo = fetchResult.firstObject {
-                PHImageManager.default().requestImageData(for: photo, options: nil) { (data, _, _, _) in
-                    if let data = data {
-                        print(data.count)
+                
+                PHImageManager.default().requestImageData(for: photo, options: nil) { (data, _, _,info) in
+                    if let data = data,
+                        let fileName = (info?["PHImageFileURLKey"] as? URL)?.lastPathComponent {
                         picker.dismiss(animated: true, completion: nil)
+                        FileStore.data.upload(fileData: data, fileName: fileName) {file in print(file)}
                     }
                 }
             }
