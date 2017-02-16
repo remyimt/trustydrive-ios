@@ -57,10 +57,19 @@ class HomeVC: UIViewController, FolderRenderer {
         // Dispose of any resources that can be recreated.
     }
     
-    func getCurrentPath() -> String {
-        let stack = self.navigationController!.viewControllers.map { controller in controller.navigationItem.title! }
-        return stack.joined(separator: "/")
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier! {
+        case "showMove":
+            let destinationNavigationController = segue.destination as! UINavigationController
+            let targetController = destinationNavigationController.topViewController as! MoveVC
+            let fileToMove = sender as! File
+            targetController.files = self.files.filter{ file in file.type == .directory && file != fileToMove }
+            targetController.file = fileToMove
+        default:
+            break
+        }
     }
+    
     
     @IBAction func addButtonClicked() {
         self.displayActionSheet()

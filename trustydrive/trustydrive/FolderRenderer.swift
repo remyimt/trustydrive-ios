@@ -21,7 +21,7 @@ protocol FolderRenderer: UITableViewDelegate {
     //var qlFileHelper: QLFileHelper? {get set}
     func displayActionSheet()
     func displayImportFileActionSheet()
-    func displayMore()
+    func displayMore(file: File)
     func preview(file: File)
     func openDirectory(file: File)
     func getCurrentPath() -> String
@@ -151,7 +151,7 @@ extension FolderRenderer where Self: UIViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
-    func displayMore() {
+    func displayMore(file: File) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let renameAction = UIAlertAction(title: "Rename", style: .default) { action in
@@ -160,7 +160,8 @@ extension FolderRenderer where Self: UIViewController {
         alertController.addAction(renameAction)
         
         let moveAction = UIAlertAction(title: "Move", style: .default) { action in
-            
+            print(self)
+            self.performSegue(withIdentifier: "showMove", sender: file)
         }
         alertController.addAction(moveAction)
         
@@ -174,4 +175,10 @@ extension FolderRenderer where Self: UIViewController {
         
         self.present(alertController, animated: true, completion: nil)
     }
+    
+    func getCurrentPath() -> String {
+        let stack = self.navigationController!.viewControllers.map { controller in controller.navigationItem.title! }
+        return stack.joined(separator: "/")
+    }
+    
 }

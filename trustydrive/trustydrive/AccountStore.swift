@@ -28,7 +28,7 @@ enum Provider: String {
     case drive = "Google Drive"
 }
 
-struct Account: Glossy {
+struct Account: Glossy, Equatable {
     let token: String
     let provider: Provider
     let email: String
@@ -60,6 +60,10 @@ struct Account: Glossy {
             "token" ~~> self.token
             ])
     }
+
+    static func ==(lhs: Account, rhs: Account)-> Bool {
+        return lhs.token == rhs.token && lhs.provider == rhs.provider
+    }
 }
 
 class AccountStore: NSObject {
@@ -77,7 +81,7 @@ class AccountStore: NSObject {
         
         let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
         let group = DispatchGroup()
-        
+
         var trustyDriveAccountIsBrandNew = true
         for account in accounts {
             group.enter()
@@ -120,21 +124,21 @@ class AccountStore: NSObject {
         
         let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
         let group = DispatchGroup()
-        
+
         let data = try! JSONSerialization.data(withJSONObject: Root(files: FileStore.data.files!).toJSON()!, options: [])
         let metadataArray = [UInt8](data)
-        
+
         // Initialize one buffer per provider
         var buffers = [[UInt8]]()
         for _ in accounts {
             buffers.append([UInt8]())
         }
-        
+
         // Distribute the bytes within the buffers
         for i in 0...metadataArray.count - 1 {
             buffers[i % accounts.count].append(metadataArray[i])
         }
-        
+
         // Turn the buffers into files and upload them to the Dropbox accounts
         for buffer in buffers {
             group.enter()
@@ -145,7 +149,7 @@ class AccountStore: NSObject {
             dropboxClients[accounts[bufferIndex].token]?.files.upload(path: "/" + self.accounts[bufferIndex].metadataName!, clientModified: Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7)))), input: chunk)
             group.leave()
         }
-        
+
         group.notify(queue: queue) {
             
             DispatchQueue.main.async {

@@ -39,16 +39,22 @@ class DirectoryVC: UIViewController, FolderRenderer {
         super.viewDidDisappear(animated)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier! {
+        case "showMove":
+            let destinationNavigationController = segue.destination as! UINavigationController
+            let targetController = destinationNavigationController.topViewController as! MoveVC
+            let fileToMove = sender as! File
+            targetController.files = FileStore.data.files!.filter{ file in file.type == .directory && file != fileToMove }
+            targetController.file = fileToMove
+        default:
+            break
+        }
+    }
+    
     @IBAction func addButtonClicked() {
         self.displayActionSheet()
     }
-    
-    func getCurrentPath() -> String {
-        let stack = self.navigationController!.viewControllers.map { controller in controller.navigationItem.title! }
-        return stack.joined(separator: "/")
-    }
-    
-    
-    
+
     
 }
