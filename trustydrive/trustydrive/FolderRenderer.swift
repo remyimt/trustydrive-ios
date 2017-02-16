@@ -24,7 +24,9 @@ protocol FolderRenderer: UITableViewDelegate {
     func displayMore(file: File)
     func preview(file: File)
     func openDirectory(file: File)
+    func displayLoadingAction(message: String)
     func getCurrentPath() -> String
+    func dismissLoadingAction()
     //var tableViewDelgate: UITableViewDelegate? {get set}
 }
 
@@ -130,11 +132,15 @@ extension FolderRenderer where Self: UIViewController {
                 let absolutePath = "\(path)/\(name)"
                 
                 if let file = FileStore.data.mkdir(name: name, absolutePath: absolutePath) {
-                    self.files.append(file)
-                    self.fileTableDataSource.files.append(file)
-                    self.tableView.beginUpdates()
-                    self.tableView.insertRows(at: [IndexPath(row: self.files.count-1, section: 0)], with: .automatic)
-                    self.tableView.endUpdates()
+                    self.displayLoadingAction(message: "Creating Folder...")
+                    AccountStore.singleton.uploadMetadata {
+                        self.files.append(file)
+                        self.fileTableDataSource.files.append(file)
+                        self.tableView.beginUpdates()
+                        self.tableView.insertRows(at: [IndexPath(row: self.files.count-1, section: 0)], with: .automatic)
+                        self.tableView.endUpdates()
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }
             }
         }
@@ -179,6 +185,10 @@ extension FolderRenderer where Self: UIViewController {
     func getCurrentPath() -> String {
         let stack = self.navigationController!.viewControllers.map { controller in controller.navigationItem.title! }
         return stack.joined(separator: "/")
+    }
+    
+    func dismissLoadingAction() {
+        self.dismiss(animated: true, completion: nil)
     }
     
 }

@@ -17,7 +17,6 @@
 		9E13F2951E51FE3800CDB143 /* FileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2881E51FE3800CDB143 /* FileVC.swift */; };
 		9E13F2961E51FE3800CDB143 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2891E51FE3800CDB143 /* HomeVC.swift */; };
 		9E13F2971E51FE3800CDB143 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F28A1E51FE3800CDB143 /* LoginVC.swift */; };
-		9E13F2981E51FE3800CDB143 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F28B1E51FE3800CDB143 /* ViewController.swift */; };
 		9E3420831E52F6FE001E549D /* QLFileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3420821E52F6FE001E549D /* QLFileHelper.swift */; };
 		9E3420851E52FB3A001E549D /* FolderRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3420841E52FB3A001E549D /* FolderRenderer.swift */; };
 		9E3420871E5304ED001E549D /* ImagePickerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3420861E5304ED001E549D /* ImagePickerHelper.swift */; };
@@ -26,6 +25,7 @@
 		9E34208F1E537B22001E549D /* FileCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34208E1E537B22001E549D /* FileCellView.swift */; };
 		9E4D6EB81E520920006BBAEF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E4D6EB21E520911006BBAEF /* LaunchScreen.storyboard */; };
 		9EABD9D61E55EFAC00EEA296 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EABD9D41E55EFAC00EEA296 /* Main.storyboard */; };
+		9EABD9D91E560C7200EEA296 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EABD9D81E560C7200EEA296 /* Account.swift */; };
 		9ED1D3141E54C24800AAA4E5 /* MoveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED1D3131E54C24800AAA4E5 /* MoveVC.swift */; };
 		CA65E92239F839F804ABCD32 /* Pods_trustydrive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEF1929D87C4B5A66BEED9AA /* Pods_trustydrive.framework */; };
 /* End PBXBuildFile section */
@@ -44,7 +44,6 @@
 		9E13F2881E51FE3800CDB143 /* FileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileVC.swift; path = trustydrive/FileVC.swift; sourceTree = SOURCE_ROOT; };
 		9E13F2891E51FE3800CDB143 /* HomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeVC.swift; path = trustydrive/HomeVC.swift; sourceTree = SOURCE_ROOT; };
 		9E13F28A1E51FE3800CDB143 /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginVC.swift; path = trustydrive/LoginVC.swift; sourceTree = SOURCE_ROOT; };
-		9E13F28B1E51FE3800CDB143 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = trustydrive/ViewController.swift; sourceTree = SOURCE_ROOT; };
 		9E3420821E52F6FE001E549D /* QLFileHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLFileHelper.swift; sourceTree = "<group>"; };
 		9E3420841E52FB3A001E549D /* FolderRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderRenderer.swift; sourceTree = "<group>"; };
 		9E3420861E5304ED001E549D /* ImagePickerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerHelper.swift; sourceTree = "<group>"; };
@@ -54,6 +53,7 @@
 		9E4D6EB31E520911006BBAEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9E6667D21E479786008AA478 /* trustydrive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = trustydrive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EABD9D51E55EFAC00EEA296 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		9EABD9D81E560C7200EEA296 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		9ED1D3131E54C24800AAA4E5 /* MoveVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveVC.swift; sourceTree = "<group>"; };
 		BEF1929D87C4B5A66BEED9AA /* Pods_trustydrive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_trustydrive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE48A9DC59D6CB975DF9BC5F /* Pods-trustydrive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trustydrive.release.xcconfig"; path = "Pods/Target Support Files/Pods-trustydrive/Pods-trustydrive.release.xcconfig"; sourceTree = "<group>"; };
@@ -109,6 +109,7 @@
 		9E6667D41E479786008AA478 /* trustydrive */ = {
 			isa = PBXGroup;
 			children = (
+				9EABD9D71E560C6000EEA296 /* Models */,
 				9EABD9D41E55EFAC00EEA296 /* Main.storyboard */,
 				9E4D6EB21E520911006BBAEF /* LaunchScreen.storyboard */,
 				9E13F27E1E51FE3800CDB143 /* Assets.xcassets */,
@@ -123,7 +124,6 @@
 				9E13F2881E51FE3800CDB143 /* FileVC.swift */,
 				9E13F2891E51FE3800CDB143 /* HomeVC.swift */,
 				9E13F28A1E51FE3800CDB143 /* LoginVC.swift */,
-				9E13F28B1E51FE3800CDB143 /* ViewController.swift */,
 				9E3420821E52F6FE001E549D /* QLFileHelper.swift */,
 				9E3420841E52FB3A001E549D /* FolderRenderer.swift */,
 				9E3420861E5304ED001E549D /* ImagePickerHelper.swift */,
@@ -133,6 +133,14 @@
 				9ED1D3131E54C24800AAA4E5 /* MoveVC.swift */,
 			);
 			path = trustydrive;
+			sourceTree = "<group>";
+		};
+		9EABD9D71E560C6000EEA296 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9EABD9D81E560C7200EEA296 /* Account.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,11 +279,11 @@
 				9E13F2961E51FE3800CDB143 /* HomeVC.swift in Sources */,
 				9E13F2941E51FE3800CDB143 /* FileTableDelegate.swift in Sources */,
 				9E3420871E5304ED001E549D /* ImagePickerHelper.swift in Sources */,
-				9E13F2981E51FE3800CDB143 /* ViewController.swift in Sources */,
 				9ED1D3141E54C24800AAA4E5 /* MoveVC.swift in Sources */,
 				9E13F28F1E51FE3800CDB143 /* AccountStore.swift in Sources */,
 				9E34208F1E537B22001E549D /* FileCellView.swift in Sources */,
 				9E13F2921E51FE3800CDB143 /* DirectoryVC.swift in Sources */,
+				9EABD9D91E560C7200EEA296 /* Account.swift in Sources */,
 				9E13F2911E51FE3800CDB143 /* AppDelegate.swift in Sources */,
 				9E13F2931E51FE3800CDB143 /* File.swift in Sources */,
 				9E3420831E52F6FE001E549D /* QLFileHelper.swift in Sources */,

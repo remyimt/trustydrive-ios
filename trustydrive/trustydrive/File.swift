@@ -128,12 +128,34 @@ class FileStore: NSObject, FileManager {
                 return nil
             }
         }
-
+        
     }
     
-    func rename(newName: String, absolutePath: String, newAbsolutePath: String)->Bool {
+    func rename(newName: String, absolutePath: String)->Bool {
         var path = absolutePath.components(separatedBy: "/")
         path.removeFirst()
+        
+        let currentPath = path[0]
+        
+        let index = self.files?.index { file in file.name == currentPath}
+        
+        if let index = index {
+            
+            if path.count == 1 && self.files?[index].name == path[0]{
+                self.files?[index].name = newName
+                return true
+            } else {
+                path.removeFirst()
+                return self.files![index].rename(newName: newName, pathArray: path)
+            }
+        } else {
+            return false
+        }
+        
+    }
+    
+    func addFile(file: File, absolutePath: String)->Bool {
+        var path = absolutePath.components(separatedBy: "/")
         
         let currentPath = path[0]
         
@@ -146,18 +168,20 @@ class FileStore: NSObject, FileManager {
         if let index = index {
             
             if path.count == 1 && self.files?[index].name == path[0]{
-                self.files?[index].name = newName
-                self.files?[index].absolutePath = newAbsolutePath
+                self.files![index].files!.append(file)
                 return true
             } else {
                 path.removeFirst()
-                //return self.files?[index].rename(newName: newName, pathArray: path)
-                return false
+                return self.files![index].addFile(file: file, pathArray: path)
             }
         } else {
             return false
         }
-
+        
+    }
+    
+    func move(file: File, previousPath: String, newPath: String)->Bool {
+        return (self.remove(absolutePath: previousPath) != nil) && self.addFile(file: file, absolutePath: newPath)
     }
 }
 
@@ -341,38 +365,49 @@ struct File: Glossy, Equatable {
                 return nil
             }
         }
-
+        
     }
     
     mutating func rename(newName: String, pathArray: [String])-> Bool {
         var path = pathArray
         let currentPath = path[0]
         
-        let index = self.files?.index { file in
-            print("File Name: "+file.name)
-            print("Current Path: "+currentPath)
-            return file.name == currentPath
-        }
+        let index = self.files?.index { file in file.name == currentPath }
         
         if let index = index {
             
             if path.count == 1 && self.files?[index].name == path[0]{
                 self.files?[index].name = newName
-                self.files?[index].renameInAbsolutePath(oldName: path[0], newName: newName)
                 return true
             } else {
                 path.removeFirst()
-                //return self.files?[index].rename(newName: newName, pathArray: path)
-                return false
+                return self.files![index].rename(newName: newName, pathArray: path)
+            }
+        } else {
+            return false
+        }
+        
+    }
+    
+    mutating func addFile(file: File, pathArray: [String])-> Bool {
+        var path = pathArray
+        let currentPath = path[0]
+        
+        let index = self.files?.index { file in file.name == currentPath }
+        
+        if let index = index {
+            
+            if path.count == 1 && self.files?[index].name == path[0]{
+                self.files?[index].files?.append(file)
+                return true
+            } else {
+                path.removeFirst()
+                return self.files![index].addFile(file: file, pathArray: path)
             }
         } else {
             return false
         }
 
-    }
-    
-    mutating func renameInAbsolutePath(oldName: String, newName: String) {
-        //self.absolutePath.replace
     }
     
 }

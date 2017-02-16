@@ -10,8 +10,6 @@ import Gloss
 import SwiftyDropbox
 import CryptoSwift
 
-typealias JSON = Gloss.JSON
-
 protocol AccountStoreDelgate {
     func willFetch()
     func didChange(accounts: [Account])
@@ -20,50 +18,6 @@ protocol AccountStoreDelgate {
 protocol LoginDelegate {
     func willStart()
     func success(result: Bool)
-}
-
-enum Provider: String {
-    case dropbox = "Dropbox"
-    case onedrive = "OneDrive"
-    case drive = "Google Drive"
-}
-
-struct Account: Glossy, Equatable {
-    let token: String
-    let provider: Provider
-    let email: String
-    var metadataName: String?
-    
-    init(token: String, provider: Provider, email: String) {
-        self.token = token
-        self.provider = provider
-        self.email = email
-    }
-    
-    init?(json: JSON) {
-        
-        guard let token: String = "token" <~~ json,
-            let provider: String = "provider" <~~ json,
-            let email: String = "email" <~~ json else {
-                return nil
-        }
-        
-        self.token = token
-        self.provider = Provider(rawValue: provider)!
-        self.email = email
-    }
-    
-    func toJSON() -> JSON? {
-        return jsonify([
-            "email" ~~> self.email,
-            "provider" ~~> self.provider,
-            "token" ~~> self.token
-            ])
-    }
-
-    static func ==(lhs: Account, rhs: Account)-> Bool {
-        return lhs.token == rhs.token && lhs.provider == rhs.provider
-    }
 }
 
 class AccountStore: NSObject {
@@ -81,7 +35,7 @@ class AccountStore: NSObject {
         
         let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
         let group = DispatchGroup()
-
+        
         var trustyDriveAccountIsBrandNew = true
         for account in accounts {
             group.enter()
@@ -124,21 +78,21 @@ class AccountStore: NSObject {
         
         let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
         let group = DispatchGroup()
-
+        
         let data = try! JSONSerialization.data(withJSONObject: Root(files: FileStore.data.files!).toJSON()!, options: [])
         let metadataArray = [UInt8](data)
-
+        
         // Initialize one buffer per provider
         var buffers = [[UInt8]]()
         for _ in accounts {
             buffers.append([UInt8]())
         }
-
+        
         // Distribute the bytes within the buffers
         for i in 0...metadataArray.count - 1 {
             buffers[i % accounts.count].append(metadataArray[i])
         }
-
+        
         // Turn the buffers into files and upload them to the Dropbox accounts
         for buffer in buffers {
             group.enter()
@@ -146,10 +100,18 @@ class AccountStore: NSObject {
                 Buffer == buffer
             })!
             let chunk = Data(bytes: buffer)
-            dropboxClients[accounts[bufferIndex].token]?.files.upload(path: "/" + self.accounts[bufferIndex].metadataName!, clientModified: Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7)))), input: chunk)
+            dropboxClients[accounts[bufferIndex].token]?.files.upload(path: "/" + self.accounts[bufferIndex].metadataName!, mode: .overwrite, clientModified: Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7)))), input: chunk)
+                .response { response, error in
+                    if let response = response {
+                        print(response)
+                    } else if let error = error {
+                        print(error)
+                    }
+            }
+            
             group.leave()
         }
-
+        
         group.notify(queue: queue) {
             
             DispatchQueue.main.async {

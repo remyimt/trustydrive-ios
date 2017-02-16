@@ -63,6 +63,7 @@ class HomeVC: UIViewController, FolderRenderer {
             let destinationNavigationController = segue.destination as! UINavigationController
             let targetController = destinationNavigationController.topViewController as! MoveVC
             let fileToMove = sender as! File
+            targetController.previousAbsolutePath = self.getCurrentPath()
             targetController.files = self.files.filter{ file in file.type == .directory && file != fileToMove }
             targetController.file = fileToMove
         default:

@@ -13,6 +13,7 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var file: File!
     var files: [File]!
+    var previousAbsolutePath: String!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -35,6 +36,9 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let path = self.navigationController!.viewControllers.map { controller in controller.navigationItem.title! }
         print("The file to move: \(self.file)")
         print("With absolute path: \(path)")
+        
+        //TODO Call Move, update meta and dismiss on callback
+        
         self.dismiss(animated: true, completion: nil)
     }
 
