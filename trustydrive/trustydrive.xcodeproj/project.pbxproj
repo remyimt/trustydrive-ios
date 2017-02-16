@@ -25,8 +25,8 @@
 		9E34208D1E537864001E549D /* FileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E34208C1E537864001E549D /* FileCell.xib */; };
 		9E34208F1E537B22001E549D /* FileCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34208E1E537B22001E549D /* FileCellView.swift */; };
 		9E4D6EB81E520920006BBAEF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E4D6EB21E520911006BBAEF /* LaunchScreen.storyboard */; };
+		9EABD9D61E55EFAC00EEA296 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EABD9D41E55EFAC00EEA296 /* Main.storyboard */; };
 		9ED1D3141E54C24800AAA4E5 /* MoveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED1D3131E54C24800AAA4E5 /* MoveVC.swift */; };
-		9ED1D3161E54C85B00AAA4E5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ED1D3151E54C85B00AAA4E5 /* Main.storyboard */; };
 		CA65E92239F839F804ABCD32 /* Pods_trustydrive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEF1929D87C4B5A66BEED9AA /* Pods_trustydrive.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,8 +53,8 @@
 		9E34208E1E537B22001E549D /* FileCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCellView.swift; sourceTree = "<group>"; };
 		9E4D6EB31E520911006BBAEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9E6667D21E479786008AA478 /* trustydrive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = trustydrive.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9EABD9D51E55EFAC00EEA296 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9ED1D3131E54C24800AAA4E5 /* MoveVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveVC.swift; sourceTree = "<group>"; };
-		9ED1D3151E54C85B00AAA4E5 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = ../../../../../../.Trash/Main.storyboard; sourceTree = "<group>"; };
 		BEF1929D87C4B5A66BEED9AA /* Pods_trustydrive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_trustydrive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE48A9DC59D6CB975DF9BC5F /* Pods-trustydrive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trustydrive.release.xcconfig"; path = "Pods/Target Support Files/Pods-trustydrive/Pods-trustydrive.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -109,7 +109,7 @@
 		9E6667D41E479786008AA478 /* trustydrive */ = {
 			isa = PBXGroup;
 			children = (
-				9ED1D3151E54C85B00AAA4E5 /* Main.storyboard */,
+				9EABD9D41E55EFAC00EEA296 /* Main.storyboard */,
 				9E4D6EB21E520911006BBAEF /* LaunchScreen.storyboard */,
 				9E13F27E1E51FE3800CDB143 /* Assets.xcassets */,
 				9E13F2801E51FE3800CDB143 /* trustydrive.entitlements */,
@@ -206,7 +206,7 @@
 				9E34208D1E537864001E549D /* FileCell.xib in Resources */,
 				9E4D6EB81E520920006BBAEF /* LaunchScreen.storyboard in Resources */,
 				9E13F28C1E51FE3800CDB143 /* Assets.xcassets in Resources */,
-				9ED1D3161E54C85B00AAA4E5 /* Main.storyboard in Resources */,
+				9EABD9D61E55EFAC00EEA296 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +293,14 @@
 				9E4D6EB31E520911006BBAEF /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		9EABD9D41E55EFAC00EEA296 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9EABD9D51E55EFAC00EEA296 /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
