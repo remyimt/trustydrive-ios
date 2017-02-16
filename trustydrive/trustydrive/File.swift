@@ -119,6 +119,22 @@ class FileStore: NSObject, FileManager {
         
     }
     
+    func delete(file: File, completionHandler: @escaping (Bool)->Void) {
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            for chunk in file.chunks! {
+                let client = AccountStore.singleton.dropboxClients[chunk.account.token]
+                client?.files.delete(path: "/" + chunk.name)
+            }
+            
+            DispatchQueue.main.async {
+                completionHandler(true)
+            }
+            
+        }
+        
+    }
+    
     func generateRandomHash(length:Int) -> String {
         var randomHash:String = ""
         for _ in 0...length-1 {
