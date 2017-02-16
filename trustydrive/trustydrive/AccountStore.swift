@@ -104,7 +104,7 @@ class AccountStore: NSObject {
                 self.createMetadata(password: password)
             }
             else {
-                self.fetchMetadata()
+                self.fetchMetadata(password: password)
             }
         }
     }
@@ -147,30 +147,51 @@ class AccountStore: NSObject {
         
     }
     
-    func fetchMetadata() {
+    func fetchMetadata(password: String) {
         
-        //Single account implmentation
-        let account = accounts[0]
-        let metadataName = "/metadata.txt"
-        //let metadataName = (account.provider.rawValue+account.email+password).sha1
-        let client = self.dropboxClients[account.token]!
+        let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
+        let group = DispatchGroup()
         
-        // Replace with mine
-        client.files.download(path: metadataName)
-            .response { response, error in
-                if let response = response {
-                    
-                    guard let root: Root = Root(data: response.1) else {
-                        print("Unable to parse metadata")
-                        return
+        // Download the chunks composing the metadata (one chunk per provider)
+        var chunks = [[UInt8]](repeating: [UInt8](), count: self.accounts.count)
+        for account in self.accounts {
+            group.enter()
+            let metadataName = (account.provider.rawValue+account.email+password).sha1() // Get the name of the file to download
+            let accountIndex = self.accounts.index(where: { (Account) -> Bool in
+                Account.token == account.token
+            })!
+            dropboxClients[account.token]?.files.download(path: "/" + metadataName)
+                .response(queue: queue) { response, error in
+                    if let (_, data) = response {
+                        chunks[accountIndex] = [UInt8](data)
                     }
-                    
-                    FileStore.data.files = root.files
-                    
-                    self.loginDelegate?.success(result: true)
-                } else if let error = error {
-                    print(error)
-                }
+                    else if let error = error {
+                        print(error)
+                    }
+                    group.leave()
+            }
+            
+        }
+        
+        group.notify(queue: queue) {
+            // Compute the total size of the metadata file
+            var metadataSize = 0
+            for chunk in chunks {
+                metadataSize += chunk.count
+            }
+            
+            // Rebuild the metadata off the chunks
+            var metadata = [UInt8](repeating: 0, count: metadataSize)
+            for i in 0...metadataSize - 1 {
+                metadata[i] = chunks[i % self.accounts.count][(i - (i % self.accounts.count))/self.accounts.count]
+            }
+            
+            guard let root: Root = Root(data: Data(metadata)) else {
+                print("Unable to parse metadata")
+                return
+            }
+            FileStore.data.files = root.files
+            self.loginDelegate?.success(result: true)
         }
         
     }
