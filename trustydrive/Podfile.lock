@@ -1,7 +1,7 @@
 PODS:
   - Alamofire (4.0.1)
   - CryptoSwift (0.6.7)
-  - Gloss (1.2.0)
+  - Gloss (1.2.1)
   - IQKeyboardManagerSwift (4.0.8)
   - SwiftyDropbox (4.1.1):
     - Alamofire (~> 4.0.1)
@@ -15,10 +15,10 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
   CryptoSwift: 685ae257941e5447474348a2b545583e1a16b573
-  Gloss: ec49584b2e8144e39810b6db6285433316e0c1c7
+  Gloss: 9ab33b8ede01e4232571d43a6bf9259b85d1de69
   IQKeyboardManagerSwift: c04bc9f68473823f825eb44d958fce98d921bead
   SwiftyDropbox: dfcd4d308d32d74729255b48833db61acdfb9c23
 
 PODFILE CHECKSUM: 989e4dd1488bb984b671adf40cd745b4bfeac47b
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.1.1

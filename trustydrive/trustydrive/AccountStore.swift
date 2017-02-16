@@ -60,7 +60,7 @@ struct Account: Glossy, Equatable {
             "token" ~~> self.token
             ])
     }
-    
+
     static func ==(lhs: Account, rhs: Account)-> Bool {
         return lhs.token == rhs.token && lhs.provider == rhs.provider
     }
@@ -77,49 +77,72 @@ class AccountStore: NSObject {
     
     
     func login(password: String) {
-        
-        //Single account implemntation
         self.loginDelegate?.willStart()
-        let account = accounts[0]
-        //let metadataName = "metadata"
-        //let metadataName = (account.provider.rawValue+account.email+password).sha1
-        let client = self.dropboxClients[account.token]
         
-        client!.files.listFolder(path: "")
-            .response{ response, error in
-                if let response = response {
-                    if response.entries.count == 0 {
-                        self.createMetadata(password: "")
-                    } else {
-                        self.fetchMetadata()
+        let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
+        let group = DispatchGroup()
+
+        var trustyDriveAccountIsBrandNew = true
+        for account in accounts {
+            group.enter()
+            dropboxClients[account.token]?.files.listFolder(path: "")
+                .response { response, error in
+                    if let response = response {
+                        if response.entries.count > 0 {
+                            trustyDriveAccountIsBrandNew = false
+                        }
                     }
-                } else if let error = error {
-                    print(error)
-                }
+                    else if let error = error {
+                        print(error)
+                    }
+                    group.leave()
+            }
         }
         
+        group.notify(queue: queue) {
+            if trustyDriveAccountIsBrandNew {
+                self.createMetadata(password: password)
+            }
+            else {
+                self.fetchMetadata()
+            }
+        }
     }
-    
-    //TODO Distributed implementation
+
     func createMetadata(password: String) {
         FileStore.data.initFiles()
-        //Single account implementation
-        let account = accounts[0]
-        let metadataName = "/metadata.txt"
-        //let metadataName = (account.provider.rawValue+account.email+password).sha1
-        let client = self.dropboxClients[account.token]!
         
-        
+        let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
+        let group = DispatchGroup()
+
         let data = try! JSONSerialization.data(withJSONObject: Root(files: FileStore.data.files!).toJSON()!, options: [])
-        
-        // TODO : replace with mine
-        client.files.upload(path: metadataName, input: data)
-            .response {response, error in
-                if (response != nil) {
-                    self.loginDelegate?.success(result: true)
-                } else if let error = error {
-                    print(error)
-                }
+        let metadataArray = [UInt8](data)
+
+        // Initialize one buffer per provider
+        var buffers = [[UInt8]]()
+        for _ in accounts {
+            buffers.append([UInt8]())
+        }
+
+        // Distribute the bytes within the buffers
+        for i in 0...metadataArray.count - 1 {
+            buffers[i % accounts.count].append(metadataArray[i])
+        }
+
+        // Turn the buffers into files and upload them to the Dropbox accounts
+        for buffer in buffers {
+            group.enter()
+            let bufferIndex = buffers.index(where: { (Buffer) -> Bool in
+                Buffer == buffer
+            })!
+            let chunk = Data(bytes: buffer)
+            let metadataName = (accounts[bufferIndex].provider.rawValue+accounts[bufferIndex].email+password).sha1()
+            dropboxClients[accounts[bufferIndex].token]?.files.upload(path: "/" + metadataName, clientModified: Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7)))), input: chunk)
+            group.leave()
+        }
+
+        group.notify(queue: queue) {
+            self.loginDelegate?.success(result: true)
         }
         
     }
