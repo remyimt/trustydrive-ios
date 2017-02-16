@@ -33,13 +33,19 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     @IBAction func done() {
-        let path = self.navigationController!.viewControllers.map { controller in controller.navigationItem.title! }
+        let newPath = self.navigationController!.viewControllers.map { controller in controller.navigationItem.title! }.joined(separator: "/")
         print("The file to move: \(self.file)")
-        print("With absolute path: \(path)")
+        print("With absolute path: \(newPath)")
         
         //TODO Call Move, update meta and dismiss on callback
-        
-        self.dismiss(animated: true, completion: nil)
+        let loadingController = self.displayLoadingAction(message: "Moving file")
+        if FileStore.data.move(file: self.file, previousPath: "\(self.previousAbsolutePath!)/\(self.file.name)", newPath: newPath) {
+            AccountStore.singleton.uploadMetadata {
+                loadingController.dismiss(animated: true) {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }
+        }
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -62,9 +68,24 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "MoveVC") as! MoveVC
         vc.file = self.file
         vc.files = file.files!.filter {file in file.type == .directory && self.file != file}
+        vc.previousAbsolutePath = self.previousAbsolutePath
         vc.navigationItem.title = file.name
         
         self.navigationController!.pushViewController(vc, animated: true)
+    }
+    
+    func displayLoadingAction(message: String)-> UIAlertController {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        
+        alert.view.tintColor = UIColor.black
+        let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50)) as UIActivityIndicatorView
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        loadingIndicator.startAnimating();
+        
+        alert.view.addSubview(loadingIndicator)
+        present(alert, animated: true, completion: nil)
+        return alert
     }
     
 }
