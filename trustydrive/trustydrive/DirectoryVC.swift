@@ -48,6 +48,7 @@ class DirectoryVC: UIViewController, FolderRenderer {
             targetController.previousAbsolutePath = self.getCurrentPath()
             targetController.files = FileStore.data.files!.filter{ file in file.type == .directory && file != fileToMove }
             targetController.file = fileToMove
+            targetController.delegate = self
         default:
             break
         }

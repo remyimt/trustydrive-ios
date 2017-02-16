@@ -15,6 +15,7 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var files: [File]!
     var previousAbsolutePath: String!
     @IBOutlet weak var tableView: UITableView!
+    weak var delegate: FolderRenderer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +43,9 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         if FileStore.data.move(file: self.file, previousPath: "\(self.previousAbsolutePath!)/\(self.file.name)", newPath: newPath) {
             AccountStore.singleton.uploadMetadata {
                 loadingController.dismiss(animated: true) {
-                    self.dismiss(animated: true, completion: nil)
+                    self.dismiss(animated: true) {
+                        self.delegate.doneMovingFile()
+                    }
                 }
             }
         }
@@ -70,6 +73,7 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         vc.files = file.files!.filter {file in file.type == .directory && self.file != file}
         vc.previousAbsolutePath = self.previousAbsolutePath
         vc.navigationItem.title = file.name
+        vc.delegate = self.delegate
         
         self.navigationController!.pushViewController(vc, animated: true)
     }

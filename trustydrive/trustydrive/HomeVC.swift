@@ -58,14 +58,15 @@ class HomeVC: UIViewController, FolderRenderer {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier! {
-        case "showMove":
+        switch segue.identifier {
+        case .some("showMove"):
             let destinationNavigationController = segue.destination as! UINavigationController
             let targetController = destinationNavigationController.topViewController as! MoveVC
             let fileToMove = sender as! File
             targetController.previousAbsolutePath = self.getCurrentPath()
             targetController.files = self.files.filter{ file in file.type == .directory && file != fileToMove }
             targetController.file = fileToMove
+            targetController.delegate = self
         default:
             break
         }
