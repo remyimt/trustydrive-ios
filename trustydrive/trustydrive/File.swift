@@ -35,6 +35,7 @@ class FileStore: NSObject, FileManager {
         var chunks = [[UInt8]](repeating: [UInt8](), count: chunksData.count)
         for chunk in chunksData {
             group.enter()
+            //let client = AccountStore.singleton.dropboxClients[chunk.account.token]!
             client!.files.download(path: "/" + chunk.name).response(queue: queue) { response, error in
                 if let (_, data) = response {
                     chunks[chunksData.index(where: { (Chunk) -> Bool in
