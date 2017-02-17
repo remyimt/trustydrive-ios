@@ -409,6 +409,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7ECBCD4F750AA0D3DFFE13B2 /* Pods-trustydrive.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = NHM7Y8WJUG;
 				INFOPLIST_FILE = trustydrive/Info.plist;
@@ -423,6 +424,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EE48A9DC59D6CB975DF9BC5F /* Pods-trustydrive.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = NHM7Y8WJUG;
 				INFOPLIST_FILE = trustydrive/Info.plist;

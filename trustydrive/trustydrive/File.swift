@@ -126,7 +126,7 @@ class FileStore: NSObject, FileManager {
         
         DispatchQueue.global(qos: .userInitiated).async {
             for chunk in file.chunks! {
-                let client = AccountStore.singleton.dropboxClients[chunk.account.token]
+                let client = AccountStore.singleton.dropboxClients[chunk.account.provider.rawValue+chunk.account.email]
                 client?.files.delete(path: "/" + chunk.name)
             }
             
