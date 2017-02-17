@@ -22,7 +22,7 @@ class FileStore: NSObject, FileManager {
         self.files = [File]()
     }
     
-    func download(file: File, completionHandler: @escaping (URL) -> Void) {
+    func download(file: File, directory: String, completionHandler: @escaping (URL) -> Void) {
         let numberOfProviders = AccountStore.singleton.accounts.count
         let chunksData = file.chunks!
         
@@ -49,7 +49,7 @@ class FileStore: NSObject, FileManager {
         
         group.notify(queue: queue) {
             let blockSize = chunks[0].count
-            let downloadDestination = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(file.name.components(separatedBy: ".")[0]).appendingPathExtension(file.name.components(separatedBy: ".")[1])
+            let downloadDestination = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent(file.name.components(separatedBy: ".")[0]).appendingPathExtension(file.name.components(separatedBy: ".")[1])
             let fileToDownload = OutputStream(url: downloadDestination, append: false)
             fileToDownload?.open()
             
@@ -115,6 +115,22 @@ class FileStore: NSObject, FileManager {
             DispatchQueue.main.async {
                 completionHandler(uploadedFile)
             }
+        }
+        
+    }
+    
+    func delete(file: File, completionHandler: @escaping (Bool)->Void) {
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            for chunk in file.chunks! {
+                let client = AccountStore.singleton.dropboxClients[chunk.account.token]
+                client?.files.delete(path: "/" + chunk.name)
+            }
+            
+            DispatchQueue.main.async {
+                completionHandler(true)
+            }
+            
         }
         
     }
@@ -282,9 +298,9 @@ struct Chunk: Glossy, Equatable {
 }
 
 protocol FileManager {
-    func download(file: File, completionHandler: @escaping (URL) -> Void)
+    func download(file: File, directory: String, completionHandler: @escaping (URL) -> Void)
     func upload(fileData: Data, fileName: String, completionHandler: @escaping (File)->Void)
-    //func delete()
+    func delete(file: File, completionHandler: @escaping (Bool)->Void)
 }
 
 struct File: Glossy, Equatable {

@@ -59,7 +59,10 @@ class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
         moreAction.backgroundColor = UIColor(red: 212.0/255.0, green: 212/255.0, blue: 212.0/255.0, alpha: 1)
         
         let downloadAction = UITableViewRowAction(style: .default, title: "Download") { action, indexPath in
-         print("download")
+            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            FileStore.data.download(file: file, directory: documentsDirectory) { _ in
+                print("done")
+            }
         }
         
         downloadAction.backgroundColor = UIColor(red: 42.0/255.0, green: 147.0/255.0, blue: 233.0/255.0, alpha: 1)
