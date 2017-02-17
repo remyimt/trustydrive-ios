@@ -33,7 +33,8 @@ class FileStore: NSObject, FileManager {
         var chunks = [[UInt8]](repeating: [UInt8](), count: chunksData.count)
         for chunk in chunksData {
             group.enter()
-            let client = AccountStore.singleton.dropboxClients[chunk.account.token]!
+            let dropboxKey = chunk.account.provider.rawValue + chunk.account.email
+            let client = AccountStore.singleton.dropboxClients[dropboxKey]!
             client.files.download(path: "/" + chunk.name).response(queue: queue) { response, error in
                 if let (_, data) = response {
                     chunks[chunksData.index(where: { (Chunk) -> Bool in
@@ -103,7 +104,9 @@ class FileStore: NSObject, FileManager {
                 for i in 0...numberOfProviders - 1 { // Turn the buffers into blocks and upload them now that they have reached the blockSize
                     let bufferData = Data(bytes: buffers[i%numberOfProviders])
                     let chunkName = self.generateRandomHash(length: 40)
-                    let client = AccountStore.singleton.dropboxClients[AccountStore.singleton.accounts[i%numberOfProviders].token]!
+                    let dropboxClientKey = AccountStore.singleton.accounts[i%numberOfProviders].provider.rawValue +
+                        AccountStore.singleton.accounts[i%numberOfProviders].email
+                    let client = AccountStore.singleton.dropboxClients[dropboxClientKey]!
                     let randomDate = Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7))))
                     client.files.upload(path: "/" + chunkName, clientModified: randomDate, input: bufferData)
                     uploadedFile.chunks?.append(Chunk(account: AccountStore.singleton.accounts[i%numberOfProviders], name: chunkName))

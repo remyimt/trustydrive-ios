@@ -28,6 +28,7 @@ protocol FolderRenderer: UITableViewDelegate {
     func getCurrentPath() -> String
     func dismissLoadingAction()
     func didChoosePhoto(fileData: Data, fileName: String)
+    func doneMovingFile()
     //var tableViewDelgate: UITableViewDelegate? {get set}
 }
 
@@ -207,6 +208,10 @@ extension FolderRenderer where Self: UIViewController {
     
     func dismissLoadingAction() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    func doneMovingFile() {
+        _ = self.navigationController?.popToRootViewController(animated: true)
     }
     
     func didChoosePhoto(fileData: Data, fileName: String) {

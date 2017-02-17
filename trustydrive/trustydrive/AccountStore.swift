@@ -39,7 +39,7 @@ class AccountStore: NSObject {
         var trustyDriveAccountIsBrandNew = true
         for account in accounts {
             group.enter()
-            dropboxClients[account.token]?.files.listFolder(path: "")
+            dropboxClients[account.provider.rawValue+account.email]?.files.listFolder(path: "")
                 .response { response, error in
                     if let response = response {
                         if response.entries.count > 0 {
@@ -100,7 +100,8 @@ class AccountStore: NSObject {
                 Buffer == buffer
             })!
             let chunk = Data(bytes: buffer)
-            dropboxClients[accounts[bufferIndex].token]?.files.upload(path: "/" + self.accounts[bufferIndex].metadataName!, mode: .overwrite, clientModified: Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7)))), input: chunk)
+            let dropboxKey = self.accounts[bufferIndex].provider.rawValue + self.accounts[bufferIndex].email
+            dropboxClients[dropboxKey]?.files.upload(path: "/" + self.accounts[bufferIndex].metadataName!, mode: .overwrite, clientModified: Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7)))), input: chunk)
                 .response { response, error in
                     if let response = response {
                         print(response)
@@ -133,7 +134,8 @@ class AccountStore: NSObject {
             let accountIndex = self.accounts.index(where: { (Account) -> Bool in
                 Account.token == account.token
             })!
-            dropboxClients[account.token]?.files.download(path: "/" + account.metadataName!)
+            let dropboxKey = account.provider.rawValue + account.email
+            dropboxClients[dropboxKey]?.files.download(path: "/" + account.metadataName!)
                 .response(queue: queue) { response, error in
                     if let (_, data) = response {
                         chunks[accountIndex] = [UInt8](data)
@@ -187,6 +189,8 @@ class AccountStore: NSObject {
                 
                 let accountsData = try! JSONSerialization.data(withJSONObject: AccountStore.singleton.accounts.toJSONArray()!, options: [])
                 
+                self.dropboxClients[Provider.dropbox.rawValue+user.email] = client
+                
                 UserDefaults.standard.set(accountsData, forKey: "accounts")
                 UserDefaults.standard.synchronize()
                 
@@ -194,8 +198,7 @@ class AccountStore: NSObject {
                     delegate.didChange(accounts: self.accounts)
                 }
         }
-        
-        self.dropboxClients[token.accessToken] = client
+    
     }
     
 }

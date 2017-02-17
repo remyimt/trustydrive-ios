@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 AccountStore.singleton.dropboxClients = accounts.reduce([String:DropboxClient]()) { dict, account in
                     var dict = dict
-                    dict[account.token] = DropboxClient(accessToken: account.token)
+                    dict[account.provider.rawValue + account.email] = DropboxClient(accessToken: account.token)
                     return dict
                 }
             }
