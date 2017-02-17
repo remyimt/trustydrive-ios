@@ -8,7 +8,7 @@
 
 import Gloss
 
-class FileStore: NSObject, FileManager {
+class FileStore: NSObject, TrustyDriveFileManager {
     
     static let data = FileStore()
     
@@ -125,17 +125,38 @@ class FileStore: NSObject, FileManager {
     func delete(file: File, completionHandler: @escaping (Bool)->Void) {
         
         DispatchQueue.global(qos: .userInitiated).async {
-            for chunk in file.chunks! {
-                let client = AccountStore.singleton.dropboxClients[chunk.account.provider.rawValue+chunk.account.email]
-                client?.files.delete(path: "/" + chunk.name)
+            if let innerFiles = file.files {
+                for file in innerFiles {
+                    self.delete(file: file) { _ in
+                        completionHandler(true)
+                    }
+                }
+            }
+            else {
+                for chunk in file.chunks! {
+                    let client = AccountStore.singleton.dropboxClients[chunk.account.provider.rawValue+chunk.account.email]
+                    client?.files.delete(path: "/" + chunk.name)
+                }
             }
             
             DispatchQueue.main.async {
+                if file.localURL != nil {
+                    self.deleteFromDevice(file: file)
+                }
                 completionHandler(true)
             }
             
         }
         
+    }
+    
+    func deleteFromDevice(file: File) {
+        if let localPath = file.localURL {
+            try! FileManager.default.removeItem(atPath: localPath)
+        }
+        else {
+            print("File was not found at the given local path")
+        }
     }
     
     func generateRandomHash(length:Int) -> String {
@@ -300,7 +321,7 @@ struct Chunk: Glossy, Equatable {
     }
 }
 
-protocol FileManager {
+protocol TrustyDriveFileManager {
     func download(file: File, directory: String, completionHandler: @escaping (URL) -> Void)
     func upload(fileData: Data, fileName: String, completionHandler: @escaping (File)->Void)
     func delete(file: File, completionHandler: @escaping (Bool)->Void)

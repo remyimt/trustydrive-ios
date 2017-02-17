@@ -60,6 +60,7 @@ class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
         
         let downloadAction = UITableViewRowAction(style: .default, title: "Download") { action, indexPath in
             let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            print(documentsDirectory)
             FileStore.data.download(file: file, directory: documentsDirectory) { _ in
                 print("done")
             }
