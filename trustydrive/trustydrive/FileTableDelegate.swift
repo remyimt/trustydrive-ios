@@ -59,7 +59,11 @@ class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
         moreAction.backgroundColor = UIColor(red: 212.0/255.0, green: 212/255.0, blue: 212.0/255.0, alpha: 1)
         
         let downloadAction = UITableViewRowAction(style: .default, title: "Download") { action, indexPath in
-         print("download")
+            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            print(documentsDirectory)
+            FileStore.data.download(file: file, directory: documentsDirectory) { _ in
+                print("done")
+            }
         }
         
         downloadAction.backgroundColor = UIColor(red: 42.0/255.0, green: 147.0/255.0, blue: 233.0/255.0, alpha: 1)
@@ -69,15 +73,18 @@ class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
             
             let path: String = self.delegate!.getCurrentPath()
             
-            if let _ = FileStore.data.remove(absolutePath: "\(path)/\(file.name)") {
-                self.delegate!.displayLoadingAction(message: "Deleting file..")
-                AccountStore.singleton.uploadMetadata {
-                    self.files.remove(at: indexPath.row)
-                    self.delegate!.files.remove(at: indexPath.row)
-                    tableView.deleteRows(at: [indexPath], with: .fade)
-                    self.delegate!.dismissLoadingAction()
+            FileStore.data.delete(file: file) { _ in
+                if let _ = FileStore.data.remove(absolutePath: "\(path)/\(file.name)") {
+                    self.delegate!.displayLoadingAction(message: "Deleting file..")
+                    AccountStore.singleton.uploadMetadata {
+                        self.files.remove(at: indexPath.row)
+                        self.delegate!.files.remove(at: indexPath.row)
+                        tableView.deleteRows(at: [indexPath], with: .fade)
+                        self.delegate!.dismissLoadingAction()
+                    }
                 }
             }
+            
         }
         
         return [deleteAction, moreAction, downloadAction]
