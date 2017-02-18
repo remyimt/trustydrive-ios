@@ -2,17 +2,15 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Folder_50.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Folder_100.png",
+      "filename" : "trustydrive.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Folder_500.png",
       "scale" : "3x"
     }
   ],

@@ -62,11 +62,12 @@ class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
             let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
             print(documentsDirectory)
             FileStore.data.download(file: file, directory: documentsDirectory) { _ in
-                print("done")
+                let cell = tableView.cellForRow(at: indexPath) as! FileCell
+                cell.icon.image = UIImage(named: "savedFile")
             }
         }
         
-        downloadAction.backgroundColor = UIColor(red: 42.0/255.0, green: 147.0/255.0, blue: 233.0/255.0, alpha: 1)
+        downloadAction.backgroundColor = UIColor(red: 20.0/255.0, green: 128.0/255.0, blue: 225.0/255.0, alpha: 1)
         
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { action, indexPath in
             let file = self.files[indexPath.row]
