@@ -178,7 +178,7 @@
 				TargetAttributes = {
 					9E6667D11E479786008AA478 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = NHM7Y8WJUG;
+						DevelopmentTeam = Z2N9UM3C5S;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.iCloud = {
@@ -410,7 +410,7 @@
 			baseConfigurationReference = 7ECBCD4F750AA0D3DFFE13B2 /* Pods-trustydrive.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = NHM7Y8WJUG;
+				DEVELOPMENT_TEAM = Z2N9UM3C5S;
 				INFOPLIST_FILE = trustydrive/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ssdeveloping.trustydrive;
@@ -424,7 +424,7 @@
 			baseConfigurationReference = EE48A9DC59D6CB975DF9BC5F /* Pods-trustydrive.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = NHM7Y8WJUG;
+				DEVELOPMENT_TEAM = Z2N9UM3C5S;
 				INFOPLIST_FILE = trustydrive/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ssdeveloping.trustydrive;
