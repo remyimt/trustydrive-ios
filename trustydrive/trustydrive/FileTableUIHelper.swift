@@ -9,27 +9,27 @@
 import UIKit
 
 class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
-    
+
     var files: [File]
     var delegate: DirectoryUI!
-    
+
     init(files: [File]) {
         self.files = files
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.files.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         let file = self.files[indexPath.row]
-        
+
         let cell: FileCell = tableView.dequeueReusableCell(withIdentifier: "FileCell") as! FileCell
-        
+
         cell.name.text = file.name
-        
-        
+
+
         switch(file.type) {
         case .directory:
             cell.icon.image = UIImage(named: "directory")
@@ -40,31 +40,31 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
             else {
                 cell.icon.image = UIImage(named: "file")
             }
-            
+
         }
         return cell
-        
+
     }
-    
+
 //    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
 //        return true;
 //    }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }
-    
+
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
+
         var actions = [UITableViewRowAction]()
 
         let file = self.files[indexPath.row]
 
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { action, indexPath in
             let file = self.files[indexPath.row]
-            
+
             let path: String = self.delegate!.getCurrentPath()
-            
+
             TDFileManager.sharedInstance.delete(file: file) { _ in
                 if let _ = TDFileManager.sharedInstance.remove(absolutePath: "\(path)/\(file.name)") {
                     self.delegate!.displayLoadingAction(message: "Deleting file..")
@@ -76,7 +76,7 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
                     }
                 }
             }
-            
+
         }
         actions.append(deleteAction)
 
@@ -91,15 +91,24 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 print(documentsDirectory)
                 TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url, _ in
-                    
+
                     if let url = url {
-                        if(TDFileManager.sharedInstance.setLocalURL(for: file, url: url, absolutePath: "\(self.delegate!.getCurrentPath())/\(file.name)")) {
+
+                        let absolutePath = "\(self.delegate!.getCurrentPath())/\(file.name)"
+
+                        if(TDFileManager.sharedInstance.setLocalURL(url: url, absolutePath: absolutePath)) {
+                            LocalFileManager.sharedInstance.localFiles.append(LocalFile(absolutePath: absolutePath, url: url))
+
+                            let data = try! JSONSerialization.data(withJSONObject: LocalFileManager.sharedInstance.localFiles.toJSONArray()!, options: [])
+
+                            UserDefaults.standard.set(data, forKey: "localFiles")
                             let cell = tableView.cellForRow(at: indexPath) as! FileCell
                             self.files[indexPath.row].localURL = url
                             self.delegate.files[indexPath.row].localURL = url
                             cell.icon.image = UIImage(named: "savedFile")
                         }
                     }
+
                 }
                 tableView.isEditing = false
             }
@@ -112,12 +121,12 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
 
         return actions
     }
-    
-    
+
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
         let file = files[indexPath.row]
-        
+
         switch file.type {
         case .file:
             //let vc = self.delegate?.instantiateViewController(withIdentifier: "FileVC") as! FileVC
@@ -136,7 +145,7 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
             //self.navigationController!.pushViewController(vc, animated: true)
             delegate?.preview(file: file)
         }
-        
+
     }
-    
+
 }

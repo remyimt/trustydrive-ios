@@ -31,6 +31,8 @@
 		9EABD9D61E55EFAC00EEA296 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EABD9D41E55EFAC00EEA296 /* Main.storyboard */; };
 		9EABD9D91E560C7200EEA296 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EABD9D81E560C7200EEA296 /* Account.swift */; };
 		CA65E92239F839F804ABCD32 /* Pods_trustydrive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEF1929D87C4B5A66BEED9AA /* Pods_trustydrive.framework */; };
+		D81DA5741E5A31F60099AA8E /* LocalFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81DA5731E5A31F60099AA8E /* LocalFile.swift */; };
+		D81DA5761E5A33D70099AA8E /* LocalFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81DA5751E5A33D70099AA8E /* LocalFileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +64,8 @@
 		9EABD9D51E55EFAC00EEA296 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9EABD9D81E560C7200EEA296 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		BEF1929D87C4B5A66BEED9AA /* Pods_trustydrive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_trustydrive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D81DA5731E5A31F60099AA8E /* LocalFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalFile.swift; sourceTree = "<group>"; };
+		D81DA5751E5A33D70099AA8E /* LocalFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalFileManager.swift; sourceTree = "<group>"; };
 		EE48A9DC59D6CB975DF9BC5F /* Pods-trustydrive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trustydrive.release.xcconfig"; path = "Pods/Target Support Files/Pods-trustydrive/Pods-trustydrive.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -133,6 +137,7 @@
 			children = (
 				82C839218871A7D917CB4DE3 /* TDFileManager.swift */,
 				82C839485EDE1D42F36F579C /* AccountManager.swift */,
+				D81DA5751E5A33D70099AA8E /* LocalFileManager.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -180,6 +185,7 @@
 				82C832D9DBF09AC3614F4EEC /* Root.swift */,
 				82C837E6B9E7F65944EEB658 /* Chunk.swift */,
 				82C836E281244D6FFDBBB044 /* File.swift */,
+				D81DA5731E5A31F60099AA8E /* LocalFile.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -315,6 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9EABD9D91E560C7200EEA296 /* Account.swift in Sources */,
+				D81DA5741E5A31F60099AA8E /* LocalFile.swift in Sources */,
 				9E13F2911E51FE3800CDB143 /* AppDelegate.swift in Sources */,
 				82C83BBEC832327F377DF5A1 /* Root.swift in Sources */,
 				82C83233FA75FEA2EE6BA848 /* Chunk.swift in Sources */,
@@ -333,6 +340,7 @@
 				82C83025E246FDB971F6E214 /* LoginVC.swift in Sources */,
 				82C83D03C0883985115C03EB /* FileVC.swift in Sources */,
 				82C83B51BCD2E6F4EBF73556 /* DirectoryUI.swift in Sources */,
+				D81DA5761E5A33D70099AA8E /* LocalFileManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
