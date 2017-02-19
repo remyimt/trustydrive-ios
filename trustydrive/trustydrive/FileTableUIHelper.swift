@@ -91,7 +91,7 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 print(documentsDirectory)
                 TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url, _ in
-
+                    
                     if let url = url {
 
                         let absolutePath = "\(self.delegate!.getCurrentPath())/\(file.name)"
@@ -108,7 +108,6 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
                             cell.icon.image = UIImage(named: "savedFile")
                         }
                     }
-
                 }
                 tableView.isEditing = false
             }
@@ -121,12 +120,12 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
 
         return actions
     }
-
-
+    
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        
         let file = files[indexPath.row]
-
+        
         switch file.type {
         case .file:
             //let vc = self.delegate?.instantiateViewController(withIdentifier: "FileVC") as! FileVC
@@ -145,7 +144,7 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
             //self.navigationController!.pushViewController(vc, animated: true)
             delegate?.preview(file: file)
         }
-
+        
     }
-
+    
 }
