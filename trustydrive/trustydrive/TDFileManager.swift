@@ -256,7 +256,7 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
         return (self.remove(absolutePath: previousPath) != nil) && self.addFile(file: file, absolutePath: newPath)
     }
     
-    func setLocalURL(for file: File, url: URL, absolutePath: String)-> Bool {
+    func setLocalURL(url: URL, absolutePath: String)-> Bool {
         var path = absolutePath.components(separatedBy: "/")
         path.removeFirst()
         
@@ -271,7 +271,7 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
                 return true
             } else {
                 path.removeFirst()
-                return self.files![index].setLocalUrl(file: file, url: url, pathArray: path)
+                return self.files![index].setLocalUrl(url: url, pathArray: path)
             }
         } else {
             return false

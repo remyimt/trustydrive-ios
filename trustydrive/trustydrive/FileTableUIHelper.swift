@@ -91,8 +91,15 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 print(documentsDirectory)
                 TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url in
+                    
+                    let absolutePath = "\(self.delegate!.getCurrentPath())/\(file.name)"
 
-                    if(TDFileManager.sharedInstance.setLocalURL(for: file, url: url, absolutePath: "\(self.delegate!.getCurrentPath())/\(file.name)")) {
+                    if(TDFileManager.sharedInstance.setLocalURL(url: url, absolutePath: absolutePath)) {
+                        LocalFileManager.sharedInstance.localFiles.append(LocalFile(absolutePath: absolutePath, url: url))
+                        
+                        let data = try! JSONSerialization.data(withJSONObject: LocalFileManager.sharedInstance.localFiles.toJSONArray()!, options: [])
+                        
+                        UserDefaults.standard.set(data, forKey: "localFiles")
                         let cell = tableView.cellForRow(at: indexPath) as! FileCell
                         self.files[indexPath.row].localURL = url
                         self.delegate.files[indexPath.row].localURL = url

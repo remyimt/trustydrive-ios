@@ -145,7 +145,7 @@ struct File: Glossy, Equatable {
 
     }
 
-    mutating func setLocalUrl(file: File, url: URL, pathArray: [String])-> Bool {
+    mutating func setLocalUrl(url: URL, pathArray: [String])-> Bool {
         var path = pathArray
         let currentPath = path[0]
 
@@ -158,7 +158,7 @@ struct File: Glossy, Equatable {
                 return true
             } else {
                 path.removeFirst()
-                return self.files![index].setLocalUrl(file: file, url: url, pathArray: path)
+                return self.files![index].setLocalUrl(url: url, pathArray: path)
             }
         } else {
             return false

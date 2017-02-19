@@ -167,21 +167,24 @@ class AccountManager: NSObject {
             }
             TDFileManager.sharedInstance.files = root.files
             
-            // Check for local files on the device and assign their path to the corresponding File object
-            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            let filesOnDevice: [String] = try! FileManager.default.contentsOfDirectory(atPath: documentsDirectory)
-            for fileName in filesOnDevice {
-                let fileIndex = TDFileManager.sharedInstance.files?.index(where: { (File) -> Bool in
-                    File.name == fileName
-                })
-                if let fileIndex = fileIndex {
-                    TDFileManager.sharedInstance.files![fileIndex].localURL = URL(string: documentsDirectory.appending("/" + fileName))
-                }
-            }
+            self.updateLocalFilesURLs()
             
             self.loginDelegate?.success(result: true)
         }
         
+    }
+    
+    private func updateLocalFilesURLs() {
+        let data = UserDefaults.standard.data(forKey: "localFiles")
+        
+        if let json = data {
+            if let localFiles = [LocalFile].from(data: json) {
+                LocalFileManager.sharedInstance.localFiles = localFiles
+                localFiles.forEach { localFile in
+                    _ = TDFileManager.sharedInstance.setLocalURL(url: localFile.url, absolutePath: localFile.absolutePath)
+                }
+            }
+        }
     }
     
     func saveDropboxToken(token: DropboxAccessToken) {
