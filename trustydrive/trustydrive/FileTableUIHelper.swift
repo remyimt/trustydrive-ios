@@ -8,10 +8,10 @@
 
 import UIKit
 
-class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
+class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     var files: [File]
-    var delegate: FolderRenderer!
+    var delegate: DirectoryUI!
     
     init(files: [File]) {
         self.files = files
@@ -65,10 +65,10 @@ class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
             
             let path: String = self.delegate!.getCurrentPath()
             
-            FileStore.data.delete(file: file) { _ in
-                if let _ = FileStore.data.remove(absolutePath: "\(path)/\(file.name)") {
+            TDFileManager.sharedInstance.delete(file: file) { _ in
+                if let _ = TDFileManager.sharedInstance.remove(absolutePath: "\(path)/\(file.name)") {
                     self.delegate!.displayLoadingAction(message: "Deleting file..")
-                    AccountStore.singleton.uploadMetadata {
+                    AccountManager.sharedInstance.uploadMetadata {
                         self.files.remove(at: indexPath.row)
                         self.delegate!.files.remove(at: indexPath.row)
                         tableView.deleteRows(at: [indexPath], with: .fade)
@@ -90,9 +90,9 @@ class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
             let downloadAction = UITableViewRowAction(style: .default, title: "Download") { action, indexPath in
                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 print(documentsDirectory)
-                FileStore.data.download(file: file, directory: documentsDirectory) { url in
+                TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url in
 
-                    if(FileStore.data.setLocalURL(for: file, url: url, absolutePath: "\(self.delegate!.getCurrentPath())/\(file.name)")) {
+                    if(TDFileManager.sharedInstance.setLocalURL(for: file, url: url, absolutePath: "\(self.delegate!.getCurrentPath())/\(file.name)")) {
                         let cell = tableView.cellForRow(at: indexPath) as! FileCell
                         self.files[indexPath.row].localURL = url
                         self.delegate.files[indexPath.row].localURL = url

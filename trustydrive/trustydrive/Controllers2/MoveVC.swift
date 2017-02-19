@@ -15,7 +15,7 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var files: [File]!
     var previousAbsolutePath: String!
     @IBOutlet weak var tableView: UITableView!
-    weak var delegate: FolderRenderer!
+    weak var delegate: DirectoryUI!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +40,8 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         //TODO Call Move, update meta and dismiss on callback
         let loadingController = self.displayLoadingAction(message: "Moving file")
-        if FileStore.data.move(file: self.file, previousPath: "\(self.previousAbsolutePath!)/\(self.file.name)", newPath: newPath) {
-            AccountStore.singleton.uploadMetadata {
+        if TDFileManager.sharedInstance.move(file: self.file, previousPath: "\(self.previousAbsolutePath!)/\(self.file.name)", newPath: newPath) {
+            AccountManager.sharedInstance.uploadMetadata {
                 loadingController.dismiss(animated: true) {
                     self.dismiss(animated: true) {
                         self.delegate.doneMovingFile()

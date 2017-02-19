@@ -1,5 +1,5 @@
 //
-//  ImagePickerHelper.swift
+//  ImagePickerUIHelper.swift
 //  trustydrive
 //
 //  Created by Sebastian on 14/02/2017.
@@ -9,9 +9,9 @@
 import UIKit
 import Photos
 
-class ImagePickerHelper: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ImagePickerUIHelper: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    var delegate: FolderRenderer!
+    var delegate: DirectoryUI!
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let info = info[UIImagePickerControllerReferenceURL], let url = info as? URL {

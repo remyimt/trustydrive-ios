@@ -1,5 +1,5 @@
 //
-//  FolderRenderer.swift
+//  DirectoryUI.swift
 //  trustydrive
 //
 //  Created by Sebastian on 14/02/2017.
@@ -10,14 +10,14 @@ import UIKit
 import Photos
 import QuickLook
 
-protocol FolderRenderer: UITableViewDelegate {
+protocol DirectoryUI: UITableViewDelegate {
     //var urls: [NSURL] {get set}
     var file: File? {get set}
     var files: [File]! {get set}
     //var quickLookController: QLPreviewController {get}
-    var imagePickerHelper: ImagePickerHelper? {get set}
+    var imagePickerHelper: ImagePickerUIHelper? {get set}
     weak var tableView: UITableView! {get set}
-    var fileTableDataSource: FileTableDS! {get set}
+    var fileTableDataSource: FileTableUIHelper! {get set}
     //var qlFileHelper: QLFileHelper? {get set}
     func displayActionSheet()
     func displayImportFileActionSheet()
@@ -32,14 +32,14 @@ protocol FolderRenderer: UITableViewDelegate {
     //var tableViewDelgate: UITableViewDelegate? {get set}
 }
 
-extension FolderRenderer where Self: UIViewController {
+extension DirectoryUI where Self: UIViewController {
     
     func preview(file: File) {
         
         // Check if the file has a local url
         if let localURL = file.localURL {
             displayLoadingAction(message: "Opening file...")
-            let qlFileHelper = QLFileHelper()
+            let qlFileHelper = QLFileUIHelper()
             qlFileHelper.urls = [localURL as NSURL]
             let quickLookController = QLPreviewController()
             quickLookController.dataSource = qlFileHelper
@@ -49,9 +49,9 @@ extension FolderRenderer where Self: UIViewController {
         }
         else {
             displayLoadingAction(message: "Downloading file from TrustyDrive...")
-            FileStore.data.download(file: file, directory: NSTemporaryDirectory()) { url in
+            TDFileManager.sharedInstance.download(file: file, directory: NSTemporaryDirectory()) { url in
                 let urls = [url as NSURL]
-                let qlFileHelper = QLFileHelper()
+                let qlFileHelper = QLFileUIHelper()
                 qlFileHelper.urls = urls
                 let quickLookController = QLPreviewController()
                 quickLookController.dataSource = qlFileHelper
@@ -107,7 +107,7 @@ extension FolderRenderer where Self: UIViewController {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let fromCameraRollAction = UIAlertAction(title: "From camera roll", style: .default) { action in
-            self.imagePickerHelper = ImagePickerHelper()
+            self.imagePickerHelper = ImagePickerUIHelper()
             self.imagePickerHelper!.delegate = self
             
             let imagePickerController = UIImagePickerController()
@@ -148,9 +148,9 @@ extension FolderRenderer where Self: UIViewController {
                 let name = field.text!
                 let absolutePath = "\(path)/\(name)"
                 
-                if let file = FileStore.data.mkdir(name: name, absolutePath: absolutePath) {
+                if let file = TDFileManager.sharedInstance.mkdir(name: name, absolutePath: absolutePath) {
                     self.displayLoadingAction(message: "Creating Folder...")
-                    AccountStore.singleton.uploadMetadata {
+                    AccountManager.sharedInstance.uploadMetadata {
                         self.files.append(file)
                         self.fileTableDataSource.files.append(file)
                         self.tableView.beginUpdates()
@@ -216,9 +216,9 @@ extension FolderRenderer where Self: UIViewController {
     
     func didChoosePhoto(fileData: Data, fileName: String) {
         self.displayLoadingAction(message: "Uploading photo to TrustyDrive..")
-        FileStore.data.upload(fileData: fileData, fileName: fileName) {file in
-            if FileStore.data.addFile(file: file, absolutePath: self.getCurrentPath()) {
-                AccountStore.singleton.uploadMetadata {
+        TDFileManager.sharedInstance.upload(fileData: fileData, fileName: fileName) { file in
+            if TDFileManager.sharedInstance.addFile(file: file, absolutePath: self.getCurrentPath()) {
+                AccountManager.sharedInstance.uploadMetadata {
                     self.dismissLoadingAction()
                     self.files.append(file)
                     self.fileTableDataSource.files.append(file)

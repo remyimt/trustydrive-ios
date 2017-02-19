@@ -21,12 +21,12 @@ class SettingsVC: UIViewController, UITableViewDataSource, AccountStoreDelgate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tableView.dataSource = self
-        AccountStore.singleton.accountStoreDelegate = self
+        AccountManager.sharedInstance.accountStoreDelegate = self
         self.tableView.reloadData()
     }
     
     @IBAction func logout() {
-        FileStore.data.files = nil
+        TDFileManager.sharedInstance.files = nil
         _ = self.navigationController?.popViewController(animated: true)
     }
     
@@ -40,11 +40,11 @@ class SettingsVC: UIViewController, UITableViewDataSource, AccountStoreDelgate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return AccountStore.singleton.accounts.count
+        return AccountManager.sharedInstance.accounts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let token = AccountStore.singleton.accounts[indexPath.row]
+        let token = AccountManager.sharedInstance.accounts[indexPath.row]
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProviderCell")!
         cell.textLabel?.text = token.email

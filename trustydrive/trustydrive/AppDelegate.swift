@@ -23,16 +23,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let json = data {
             if let accounts = [Account].from(data: json) {
-                AccountStore.singleton.accounts = accounts
+                AccountManager.sharedInstance.accounts = accounts
                 
-                AccountStore.singleton.dropboxClients = accounts.reduce([String:DropboxClient]()) { dict, account in
+                AccountManager.sharedInstance.dropboxClients = accounts.reduce([String:DropboxClient]()) { dict, account in
                     var dict = dict
                     dict[account.provider.rawValue + account.email] = DropboxClient(accessToken: account.token)
                     return dict
                 }
             }
         } else {
-            let data = try! JSONSerialization.data(withJSONObject: AccountStore.singleton.accounts.toJSONArray()!, options: [])
+            let data = try! JSONSerialization.data(withJSONObject: AccountManager.sharedInstance.accounts.toJSONArray()!, options: [])
             UserDefaults.standard.set(data, forKey: "accounts")
             UserDefaults.standard.synchronize()
         }
@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case .success(let token):
                 //Save the token
                 _ = DropboxOAuthManager(appKey: "vh0mfppea042f6h").storeAccessToken(token)
-                AccountStore.singleton.saveDropboxToken(token: token)
+                AccountManager.sharedInstance.saveDropboxToken(token: token)
             case .cancel:
                 print("Authorization flow was manually canceled by user!")
             case .error(_, let description):

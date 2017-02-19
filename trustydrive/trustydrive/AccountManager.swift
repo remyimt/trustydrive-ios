@@ -20,9 +20,9 @@ protocol LoginDelegate {
     func success(result: Bool)
 }
 
-class AccountStore: NSObject {
+class AccountManager: NSObject {
     
-    static let singleton = AccountStore()
+    static let sharedInstance = AccountManager()
     
     var accounts = [Account]()
     var dropboxClients = [String:DropboxClient]()
@@ -68,7 +68,7 @@ class AccountStore: NSObject {
     }
     
     func createMetadata() {
-        FileStore.data.initFiles()
+        TDFileManager.sharedInstance.initFiles()
         self.uploadMetadata() {
             self.loginDelegate?.success(result: true)
         }
@@ -79,7 +79,7 @@ class AccountStore: NSObject {
         let queue = DispatchQueue(label: "download.chunks.queue", qos: .userInitiated, attributes: .concurrent)
         let group = DispatchGroup()
         
-        let data = try! JSONSerialization.data(withJSONObject: Root(files: FileStore.data.files!).toJSON()!, options: [])
+        let data = try! JSONSerialization.data(withJSONObject: Root(files: TDFileManager.sharedInstance.files!).toJSON()!, options: [])
         let metadataArray = [UInt8](data)
         
         // Initialize one buffer per provider
@@ -165,17 +165,17 @@ class AccountStore: NSObject {
                 print("Unable to parse metadata")
                 return
             }
-            FileStore.data.files = root.files
+            TDFileManager.sharedInstance.files = root.files
             
             // Check for local files on the device and assign their path to the corresponding File object
             let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
             let filesOnDevice: [String] = try! FileManager.default.contentsOfDirectory(atPath: documentsDirectory)
             for fileName in filesOnDevice {
-                let fileIndex = FileStore.data.files?.index(where: { (File) -> Bool in
+                let fileIndex = TDFileManager.sharedInstance.files?.index(where: { (File) -> Bool in
                     File.name == fileName
                 })
                 if let fileIndex = fileIndex {
-                    FileStore.data.files![fileIndex].localURL = documentsDirectory.appending("/" + fileName)
+                    TDFileManager.sharedInstance.files![fileIndex].localURL = URL(string: documentsDirectory.appending("/" + fileName))
                 }
             }
             
@@ -200,7 +200,7 @@ class AccountStore: NSObject {
                 let token = Account(token: token.accessToken, provider: .dropbox, email: user.email)
                 self.accounts.append(token)
                 
-                let accountsData = try! JSONSerialization.data(withJSONObject: AccountStore.singleton.accounts.toJSONArray()!, options: [])
+                let accountsData = try! JSONSerialization.data(withJSONObject: AccountManager.sharedInstance.accounts.toJSONArray()!, options: [])
                 
                 self.dropboxClients[Provider.dropbox.rawValue+user.email] = client
                 

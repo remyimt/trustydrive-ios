@@ -9,7 +9,7 @@
 import UIKit
 import QuickLook
 
-class QLFileHelper: QLPreviewControllerDataSource {
+class QLFileUIHelper: QLPreviewControllerDataSource {
     
     var urls: [NSURL]?
     

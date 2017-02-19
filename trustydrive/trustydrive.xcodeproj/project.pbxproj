@@ -7,54 +7,60 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		82C83025E246FDB971F6E214 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C830D64F16927D0300EB3D /* LoginVC.swift */; };
+		82C83233FA75FEA2EE6BA848 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C837E6B9E7F65944EEB658 /* Chunk.swift */; };
+		82C832361BB56FF9A0D42434 /* FileCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C832E75088B2124FAD250E /* FileCellView.swift */; };
+		82C833C708DE22ED09381912 /* FileTableUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C83A914CBC273AB98F7209 /* FileTableUIHelper.swift */; };
+		82C83450F8E5C9132EC8440C /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C83E75D4E1414FFBF772B9 /* HomeVC.swift */; };
+		82C83462D0A0FC0EA1937AE5 /* MoveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C832A9613C47C08C2E4B89 /* MoveVC.swift */; };
+		82C834DCF8B0B23260D52B18 /* QLFileUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C8366044D3280CA3775E7A /* QLFileUIHelper.swift */; };
+		82C835B73D4204841CE3AB35 /* FileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C8361FF5C61F472215F2A1 /* FileCell.xib */; };
+		82C83752A476102ED8A04052 /* ImagePickerUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C833471620F7A3F0484BF5 /* ImagePickerUIHelper.swift */; };
+		82C837FBCE95AC627DC4A9D3 /* TDFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C839218871A7D917CB4DE3 /* TDFileManager.swift */; };
+		82C8385745FCD7485AA86D13 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C836E8CA4857B59C730310 /* SettingsVC.swift */; };
+		82C8391153D261B522D03828 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C839485EDE1D42F36F579C /* AccountManager.swift */; };
+		82C83B51BCD2E6F4EBF73556 /* DirectoryUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C838F123B0A716E5BFD80B /* DirectoryUI.swift */; };
+		82C83B7BFDDA43BF554B3B52 /* AddAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C834FD52149474C24C45B0 /* AddAccountVC.swift */; };
+		82C83BBEC832327F377DF5A1 /* Root.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C832D9DBF09AC3614F4EEC /* Root.swift */; };
+		82C83D03C0883985115C03EB /* FileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C83117A8BFFCAA099FEEC0 /* FileVC.swift */; };
+		82C83D2B970339AD93AEAFA7 /* DirectoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C832F2C47845C5051C6AA5 /* DirectoryVC.swift */; };
+		82C83F9C1C9A68D7016E54B5 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C836E281244D6FFDBBB044 /* File.swift */; };
 		9E13F28C1E51FE3800CDB143 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E13F27E1E51FE3800CDB143 /* Assets.xcassets */; };
-		9E13F28F1E51FE3800CDB143 /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2821E51FE3800CDB143 /* AccountStore.swift */; };
-		9E13F2901E51FE3800CDB143 /* AddAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2831E51FE3800CDB143 /* AddAccountVC.swift */; };
 		9E13F2911E51FE3800CDB143 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2841E51FE3800CDB143 /* AppDelegate.swift */; };
-		9E13F2921E51FE3800CDB143 /* DirectoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2851E51FE3800CDB143 /* DirectoryVC.swift */; };
-		9E13F2931E51FE3800CDB143 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2861E51FE3800CDB143 /* File.swift */; };
-		9E13F2941E51FE3800CDB143 /* FileTableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2871E51FE3800CDB143 /* FileTableDelegate.swift */; };
-		9E13F2951E51FE3800CDB143 /* FileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2881E51FE3800CDB143 /* FileVC.swift */; };
-		9E13F2961E51FE3800CDB143 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F2891E51FE3800CDB143 /* HomeVC.swift */; };
-		9E13F2971E51FE3800CDB143 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E13F28A1E51FE3800CDB143 /* LoginVC.swift */; };
-		9E3420831E52F6FE001E549D /* QLFileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3420821E52F6FE001E549D /* QLFileHelper.swift */; };
-		9E3420851E52FB3A001E549D /* FolderRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3420841E52FB3A001E549D /* FolderRenderer.swift */; };
-		9E3420871E5304ED001E549D /* ImagePickerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3420861E5304ED001E549D /* ImagePickerHelper.swift */; };
-		9E3420891E5338BA001E549D /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3420881E5338BA001E549D /* SettingsVC.swift */; };
-		9E34208D1E537864001E549D /* FileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E34208C1E537864001E549D /* FileCell.xib */; };
-		9E34208F1E537B22001E549D /* FileCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E34208E1E537B22001E549D /* FileCellView.swift */; };
 		9E4D6EB81E520920006BBAEF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E4D6EB21E520911006BBAEF /* LaunchScreen.storyboard */; };
 		9EABD9D61E55EFAC00EEA296 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EABD9D41E55EFAC00EEA296 /* Main.storyboard */; };
 		9EABD9D91E560C7200EEA296 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EABD9D81E560C7200EEA296 /* Account.swift */; };
-		9ED1D3141E54C24800AAA4E5 /* MoveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED1D3131E54C24800AAA4E5 /* MoveVC.swift */; };
 		CA65E92239F839F804ABCD32 /* Pods_trustydrive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEF1929D87C4B5A66BEED9AA /* Pods_trustydrive.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7ECBCD4F750AA0D3DFFE13B2 /* Pods-trustydrive.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trustydrive.debug.xcconfig"; path = "Pods/Target Support Files/Pods-trustydrive/Pods-trustydrive.debug.xcconfig"; sourceTree = "<group>"; };
+		82C830D64F16927D0300EB3D /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginVC.swift; path = Controllers2/LoginVC.swift; sourceTree = "<group>"; };
+		82C83117A8BFFCAA099FEEC0 /* FileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileVC.swift; path = Controllers2/FileVC.swift; sourceTree = "<group>"; };
+		82C832A9613C47C08C2E4B89 /* MoveVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MoveVC.swift; path = Controllers2/MoveVC.swift; sourceTree = "<group>"; };
+		82C832D9DBF09AC3614F4EEC /* Root.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Root.swift; sourceTree = "<group>"; };
+		82C832E75088B2124FAD250E /* FileCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCellView.swift; sourceTree = "<group>"; };
+		82C832F2C47845C5051C6AA5 /* DirectoryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DirectoryVC.swift; path = Controllers2/DirectoryVC.swift; sourceTree = "<group>"; };
+		82C833471620F7A3F0484BF5 /* ImagePickerUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerUIHelper.swift; sourceTree = "<group>"; };
+		82C834FD52149474C24C45B0 /* AddAccountVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddAccountVC.swift; path = Controllers2/AddAccountVC.swift; sourceTree = "<group>"; };
+		82C8361FF5C61F472215F2A1 /* FileCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FileCell.xib; sourceTree = "<group>"; };
+		82C8366044D3280CA3775E7A /* QLFileUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLFileUIHelper.swift; sourceTree = "<group>"; };
+		82C836E281244D6FFDBBB044 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		82C836E8CA4857B59C730310 /* SettingsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsVC.swift; path = Controllers2/SettingsVC.swift; sourceTree = "<group>"; };
+		82C837E6B9E7F65944EEB658 /* Chunk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
+		82C838F123B0A716E5BFD80B /* DirectoryUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryUI.swift; sourceTree = "<group>"; };
+		82C839218871A7D917CB4DE3 /* TDFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TDFileManager.swift; sourceTree = "<group>"; };
+		82C839485EDE1D42F36F579C /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
+		82C83A914CBC273AB98F7209 /* FileTableUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileTableUIHelper.swift; sourceTree = "<group>"; };
+		82C83E75D4E1414FFBF772B9 /* HomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeVC.swift; path = Controllers2/HomeVC.swift; sourceTree = "<group>"; };
 		9E13F27E1E51FE3800CDB143 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = trustydrive/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		9E13F2801E51FE3800CDB143 /* trustydrive.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = trustydrive.entitlements; path = trustydrive/trustydrive.entitlements; sourceTree = SOURCE_ROOT; };
 		9E13F2811E51FE3800CDB143 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = trustydrive/Info.plist; sourceTree = SOURCE_ROOT; };
-		9E13F2821E51FE3800CDB143 /* AccountStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountStore.swift; path = trustydrive/AccountStore.swift; sourceTree = SOURCE_ROOT; };
-		9E13F2831E51FE3800CDB143 /* AddAccountVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddAccountVC.swift; path = trustydrive/AddAccountVC.swift; sourceTree = SOURCE_ROOT; };
 		9E13F2841E51FE3800CDB143 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = trustydrive/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
-		9E13F2851E51FE3800CDB143 /* DirectoryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DirectoryVC.swift; path = trustydrive/DirectoryVC.swift; sourceTree = SOURCE_ROOT; };
-		9E13F2861E51FE3800CDB143 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = File.swift; path = trustydrive/File.swift; sourceTree = SOURCE_ROOT; };
-		9E13F2871E51FE3800CDB143 /* FileTableDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileTableDelegate.swift; path = trustydrive/FileTableDelegate.swift; sourceTree = SOURCE_ROOT; };
-		9E13F2881E51FE3800CDB143 /* FileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileVC.swift; path = trustydrive/FileVC.swift; sourceTree = SOURCE_ROOT; };
-		9E13F2891E51FE3800CDB143 /* HomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeVC.swift; path = trustydrive/HomeVC.swift; sourceTree = SOURCE_ROOT; };
-		9E13F28A1E51FE3800CDB143 /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginVC.swift; path = trustydrive/LoginVC.swift; sourceTree = SOURCE_ROOT; };
-		9E3420821E52F6FE001E549D /* QLFileHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QLFileHelper.swift; sourceTree = "<group>"; };
-		9E3420841E52FB3A001E549D /* FolderRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderRenderer.swift; sourceTree = "<group>"; };
-		9E3420861E5304ED001E549D /* ImagePickerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerHelper.swift; sourceTree = "<group>"; };
-		9E3420881E5338BA001E549D /* SettingsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
-		9E34208C1E537864001E549D /* FileCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FileCell.xib; sourceTree = "<group>"; };
-		9E34208E1E537B22001E549D /* FileCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCellView.swift; sourceTree = "<group>"; };
 		9E4D6EB31E520911006BBAEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9E6667D21E479786008AA478 /* trustydrive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = trustydrive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EABD9D51E55EFAC00EEA296 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9EABD9D81E560C7200EEA296 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
-		9ED1D3131E54C24800AAA4E5 /* MoveVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveVC.swift; sourceTree = "<group>"; };
 		BEF1929D87C4B5A66BEED9AA /* Pods_trustydrive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_trustydrive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE48A9DC59D6CB975DF9BC5F /* Pods-trustydrive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trustydrive.release.xcconfig"; path = "Pods/Target Support Files/Pods-trustydrive/Pods-trustydrive.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -88,6 +94,49 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		82C8348464CE62FA31E15C91 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				82C8361FF5C61F472215F2A1 /* FileCell.xib */,
+				82C832E75088B2124FAD250E /* FileCellView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		82C83B3B72BFC19A6367BA00 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				82C83E75D4E1414FFBF772B9 /* HomeVC.swift */,
+				82C834FD52149474C24C45B0 /* AddAccountVC.swift */,
+				82C836E8CA4857B59C730310 /* SettingsVC.swift */,
+				82C832F2C47845C5051C6AA5 /* DirectoryVC.swift */,
+				82C832A9613C47C08C2E4B89 /* MoveVC.swift */,
+				82C830D64F16927D0300EB3D /* LoginVC.swift */,
+				82C83117A8BFFCAA099FEEC0 /* FileVC.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		82C83B4FA5A488365E7DEEAD /* UIHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				82C83A914CBC273AB98F7209 /* FileTableUIHelper.swift */,
+				82C8366044D3280CA3775E7A /* QLFileUIHelper.swift */,
+				82C833471620F7A3F0484BF5 /* ImagePickerUIHelper.swift */,
+				82C838F123B0A716E5BFD80B /* DirectoryUI.swift */,
+			);
+			name = UIHelpers;
+			sourceTree = "<group>";
+		};
+		82C83E11A91D7B7EC398D532 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				82C839218871A7D917CB4DE3 /* TDFileManager.swift */,
+				82C839485EDE1D42F36F579C /* AccountManager.swift */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
 		9E6667C91E479786008AA478 = {
 			isa = PBXGroup;
 			children = (
@@ -109,28 +158,17 @@
 		9E6667D41E479786008AA478 /* trustydrive */ = {
 			isa = PBXGroup;
 			children = (
+				82C83E11A91D7B7EC398D532 /* Managers */,
 				9EABD9D71E560C6000EEA296 /* Models */,
+				82C8348464CE62FA31E15C91 /* Views */,
+				82C83B4FA5A488365E7DEEAD /* UIHelpers */,
+				82C83B3B72BFC19A6367BA00 /* Controllers */,
 				9EABD9D41E55EFAC00EEA296 /* Main.storyboard */,
 				9E4D6EB21E520911006BBAEF /* LaunchScreen.storyboard */,
 				9E13F27E1E51FE3800CDB143 /* Assets.xcassets */,
 				9E13F2801E51FE3800CDB143 /* trustydrive.entitlements */,
 				9E13F2811E51FE3800CDB143 /* Info.plist */,
-				9E13F2821E51FE3800CDB143 /* AccountStore.swift */,
-				9E13F2831E51FE3800CDB143 /* AddAccountVC.swift */,
 				9E13F2841E51FE3800CDB143 /* AppDelegate.swift */,
-				9E13F2891E51FE3800CDB143 /* HomeVC.swift */,
-				9E13F2851E51FE3800CDB143 /* DirectoryVC.swift */,
-				9E13F2861E51FE3800CDB143 /* File.swift */,
-				9E13F2871E51FE3800CDB143 /* FileTableDelegate.swift */,
-				9E13F2881E51FE3800CDB143 /* FileVC.swift */,
-				9E13F28A1E51FE3800CDB143 /* LoginVC.swift */,
-				9E3420821E52F6FE001E549D /* QLFileHelper.swift */,
-				9E3420841E52FB3A001E549D /* FolderRenderer.swift */,
-				9E3420861E5304ED001E549D /* ImagePickerHelper.swift */,
-				9E3420881E5338BA001E549D /* SettingsVC.swift */,
-				9E34208C1E537864001E549D /* FileCell.xib */,
-				9E34208E1E537B22001E549D /* FileCellView.swift */,
-				9ED1D3131E54C24800AAA4E5 /* MoveVC.swift */,
 			);
 			path = trustydrive;
 			sourceTree = "<group>";
@@ -139,6 +177,9 @@
 			isa = PBXGroup;
 			children = (
 				9EABD9D81E560C7200EEA296 /* Account.swift */,
+				82C832D9DBF09AC3614F4EEC /* Root.swift */,
+				82C837E6B9E7F65944EEB658 /* Chunk.swift */,
+				82C836E281244D6FFDBBB044 /* File.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -211,10 +252,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E34208D1E537864001E549D /* FileCell.xib in Resources */,
 				9E4D6EB81E520920006BBAEF /* LaunchScreen.storyboard in Resources */,
 				9E13F28C1E51FE3800CDB143 /* Assets.xcassets in Resources */,
 				9EABD9D61E55EFAC00EEA296 /* Main.storyboard in Resources */,
+				82C835B73D4204841CE3AB35 /* FileCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,22 +314,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E13F2951E51FE3800CDB143 /* FileVC.swift in Sources */,
-				9E13F2971E51FE3800CDB143 /* LoginVC.swift in Sources */,
-				9E3420851E52FB3A001E549D /* FolderRenderer.swift in Sources */,
-				9E13F2961E51FE3800CDB143 /* HomeVC.swift in Sources */,
-				9E13F2941E51FE3800CDB143 /* FileTableDelegate.swift in Sources */,
-				9E3420871E5304ED001E549D /* ImagePickerHelper.swift in Sources */,
-				9ED1D3141E54C24800AAA4E5 /* MoveVC.swift in Sources */,
-				9E13F28F1E51FE3800CDB143 /* AccountStore.swift in Sources */,
-				9E34208F1E537B22001E549D /* FileCellView.swift in Sources */,
-				9E13F2921E51FE3800CDB143 /* DirectoryVC.swift in Sources */,
 				9EABD9D91E560C7200EEA296 /* Account.swift in Sources */,
 				9E13F2911E51FE3800CDB143 /* AppDelegate.swift in Sources */,
-				9E13F2931E51FE3800CDB143 /* File.swift in Sources */,
-				9E3420831E52F6FE001E549D /* QLFileHelper.swift in Sources */,
-				9E13F2901E51FE3800CDB143 /* AddAccountVC.swift in Sources */,
-				9E3420891E5338BA001E549D /* SettingsVC.swift in Sources */,
+				82C83BBEC832327F377DF5A1 /* Root.swift in Sources */,
+				82C83233FA75FEA2EE6BA848 /* Chunk.swift in Sources */,
+				82C83F9C1C9A68D7016E54B5 /* File.swift in Sources */,
+				82C833C708DE22ED09381912 /* FileTableUIHelper.swift in Sources */,
+				82C834DCF8B0B23260D52B18 /* QLFileUIHelper.swift in Sources */,
+				82C83752A476102ED8A04052 /* ImagePickerUIHelper.swift in Sources */,
+				82C837FBCE95AC627DC4A9D3 /* TDFileManager.swift in Sources */,
+				82C8391153D261B522D03828 /* AccountManager.swift in Sources */,
+				82C832361BB56FF9A0D42434 /* FileCellView.swift in Sources */,
+				82C83450F8E5C9132EC8440C /* HomeVC.swift in Sources */,
+				82C83B7BFDDA43BF554B3B52 /* AddAccountVC.swift in Sources */,
+				82C8385745FCD7485AA86D13 /* SettingsVC.swift in Sources */,
+				82C83D2B970339AD93AEAFA7 /* DirectoryVC.swift in Sources */,
+				82C83462D0A0FC0EA1937AE5 /* MoveVC.swift in Sources */,
+				82C83025E246FDB971F6E214 /* LoginVC.swift in Sources */,
+				82C83D03C0883985115C03EB /* FileVC.swift in Sources */,
+				82C83B51BCD2E6F4EBF73556 /* DirectoryUI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

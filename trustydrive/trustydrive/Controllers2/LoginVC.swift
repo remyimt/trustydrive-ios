@@ -30,8 +30,8 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
         super.viewDidAppear(animated)
         tableView.dataSource = self
         passwordTxt.delegate = self
-        AccountStore.singleton.accountStoreDelegate = self
-        AccountStore.singleton.loginDelegate = self
+        AccountManager.sharedInstance.accountStoreDelegate = self
+        AccountManager.sharedInstance.loginDelegate = self
         self.tableView.reloadData()
     }
 
@@ -41,7 +41,7 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
     }
     
     @IBAction func dismiss() {
-        AccountStore.singleton.login(password: passwordTxt.text!)
+        AccountManager.sharedInstance.login(password: passwordTxt.text!)
     }
     
     
@@ -72,11 +72,11 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
     //UITableViewDataSource Protocol
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return AccountStore.singleton.accounts.count
+        return AccountManager.sharedInstance.accounts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let token = AccountStore.singleton.accounts[indexPath.row]
+        let token = AccountManager.sharedInstance.accounts[indexPath.row]
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProviderCell")!
         cell.textLabel?.text = token.email
@@ -91,7 +91,7 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
     }
     
     private func checkButtonState(string: String) {
-        if string.characters.count > 0 && AccountStore.singleton.accounts.count > 0{
+        if string.characters.count > 0 && AccountManager.sharedInstance.accounts.count > 0{
             self.loginBtn.isEnabled = true
             self.loginBtn.alpha = 1
             

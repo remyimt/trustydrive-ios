@@ -9,15 +9,15 @@
 import UIKit
 import QuickLook
 
-class DirectoryVC: UIViewController, FolderRenderer {
+class DirectoryVC: UIViewController, DirectoryUI {
     
     //let quickLookController = QLPreviewController()
     var urls = [NSURL]()
-    var imagePickerHelper: ImagePickerHelper?
+    var imagePickerHelper: ImagePickerUIHelper?
     //var qlFileHelper: QLFileHelper?
     var file: File?
     var files: [File]!
-    var fileTableDataSource: FileTableDS!
+    var fileTableDataSource: FileTableUIHelper!
     @IBOutlet weak var tableView: UITableView!
     //var tableViewDelgate: UITableViewDelegate?
     
@@ -27,11 +27,11 @@ class DirectoryVC: UIViewController, FolderRenderer {
         
         self.navigationItem.title = file!.name
         
-        self.fileTableDataSource = FileTableDS(files: files!)
+        self.fileTableDataSource = FileTableUIHelper(files: files!)
         self.fileTableDataSource.delegate = self
         tableView!.dataSource = self.fileTableDataSource
         tableView!.delegate = self.fileTableDataSource
-        self.imagePickerHelper = ImagePickerHelper()
+        self.imagePickerHelper = ImagePickerUIHelper()
         
     }
     
@@ -46,7 +46,7 @@ class DirectoryVC: UIViewController, FolderRenderer {
             let targetController = destinationNavigationController.topViewController as! MoveVC
             let fileToMove = sender as! File
             targetController.previousAbsolutePath = self.getCurrentPath()
-            targetController.files = FileStore.data.files!.filter{ file in file.type == .directory && file != fileToMove }
+            targetController.files = TDFileManager.sharedInstance.files!.filter{ file in file.type == .directory && file != fileToMove }
             targetController.file = fileToMove
             targetController.delegate = self
         default:

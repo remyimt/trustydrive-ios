@@ -10,13 +10,13 @@ import UIKit
 import QuickLook
 import Photos
 
-class HomeVC: UIViewController, FolderRenderer {
+class HomeVC: UIViewController, DirectoryUI {
     
-    var imagePickerHelper: ImagePickerHelper?
+    var imagePickerHelper: ImagePickerUIHelper?
     //var qlFileHelper: QLFileHelper?
     var file: File?
     var files: [File]!
-    var fileTableDataSource: FileTableDS!
+    var fileTableDataSource: FileTableUIHelper!
     var urls = [NSURL]()
     @IBOutlet weak var tableView: UITableView!
     //let quickLookController = QLPreviewController()
@@ -30,21 +30,21 @@ class HomeVC: UIViewController, FolderRenderer {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        guard (FileStore.data.files != nil) else {
+        guard (TDFileManager.sharedInstance.files != nil) else {
             performSegue(withIdentifier: "showLogin", sender: self)
             return
         }
-        if let files = FileStore.data.files {
+        if let files = TDFileManager.sharedInstance.files {
             self.files = files
             
-            self.fileTableDataSource = FileTableDS(files: self.files!)
+            self.fileTableDataSource = FileTableUIHelper(files: self.files!)
             self.fileTableDataSource.delegate = self
             
             tableView!.dataSource = self.fileTableDataSource
             tableView!.delegate = self.fileTableDataSource
             tableView!.reloadData()
         }
-        self.imagePickerHelper = ImagePickerHelper()
+        self.imagePickerHelper = ImagePickerUIHelper()
         
     }
     
