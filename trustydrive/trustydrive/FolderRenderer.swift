@@ -35,20 +35,20 @@ protocol FolderRenderer: UITableViewDelegate {
 extension FolderRenderer where Self: UIViewController {
     
     func preview(file: File) {
-        displayLoadingAction(message: "Downloading file from TrustyDrive...")
         
         // Check if the file has a local url
         if let localURL = file.localURL {
+            displayLoadingAction(message: "Opening file...")
             let qlFileHelper = QLFileHelper()
-            qlFileHelper.urls = [NSURL(fileURLWithPath: localURL)]
+            qlFileHelper.urls = [localURL as NSURL]
             let quickLookController = QLPreviewController()
             quickLookController.dataSource = qlFileHelper
             quickLookController.reloadData()
-            self.dismiss(animated: true, completion: nil)
-            self.navigationController?.pushViewController(quickLookController, animated: true)
+            self.dismiss(animated: true) { self.navigationController?.pushViewController(quickLookController, animated: true) }
             
         }
         else {
+            displayLoadingAction(message: "Downloading file from TrustyDrive...")
             FileStore.data.download(file: file, directory: NSTemporaryDirectory()) { url in
                 let urls = [url as NSURL]
                 let qlFileHelper = QLFileHelper()

@@ -140,8 +140,8 @@ class FileStore: NSObject, TrustyDriveFileManager {
             }
             
             DispatchQueue.main.async {
-                if file.localURL != nil {
-                    self.deleteFromDevice(file: file)
+                if let localUrl = file.localURL {
+                    self.deleteFromDevice(url: localUrl)
                 }
                 completionHandler(true)
             }
@@ -150,13 +150,8 @@ class FileStore: NSObject, TrustyDriveFileManager {
         
     }
     
-    func deleteFromDevice(file: File) {
-        if let localPath = file.localURL {
-            try! FileManager.default.removeItem(atPath: localPath)
-        }
-        else {
-            print("File was not found at the given local path")
-        }
+    func deleteFromDevice(url: URL) {
+        try! FileManager.default.removeItem(at: url)
     }
     
     func generateRandomHash(length:Int) -> String {
@@ -267,6 +262,30 @@ class FileStore: NSObject, TrustyDriveFileManager {
     func move(file: File, previousPath: String, newPath: String)->Bool {
         return (self.remove(absolutePath: previousPath) != nil) && self.addFile(file: file, absolutePath: newPath)
     }
+    
+    func setLocalURL(for file: File, url: URL, absolutePath: String)-> Bool {
+        var path = absolutePath.components(separatedBy: "/")
+        path.removeFirst()
+        
+        let currentPath = path[0]
+        
+        let index = self.files?.index { file in file.name == currentPath}
+        
+        if let index = index {
+            
+            if path.count == 1 && self.files?[index].name == path[0] {
+                self.files?[index].localURL = url
+                return true
+            } else {
+                path.removeFirst()
+                return self.files![index].setLocalUrl(file: file, url: url, pathArray: path)
+            }
+        } else {
+            return false
+        }
+
+        
+    }
 }
 
 struct Root: Glossy {
@@ -333,7 +352,7 @@ struct File: Glossy, Equatable {
     var chunks: [Chunk]?
     var absolutePath: String
     var uploadDate: Double
-    var localURL: String?
+    var localURL: URL?
     var size: Int?
     var files: [File]?
     
@@ -415,11 +434,7 @@ struct File: Glossy, Equatable {
         let currentPath = path[0]
         
         //Get the matching current directory
-        let index = self.files?.index { file in
-            print("File Name: "+file.name)
-            print("Current Path: "+currentPath)
-            return file.name == currentPath
-        }
+        let index = self.files?.index { file in file.name == currentPath }
         
         if let index = index {
             if path.count == 1 {
@@ -442,11 +457,7 @@ struct File: Glossy, Equatable {
             self.files?.append(file)
             return file
         } else {
-            let index = self.files?.index { file in
-                print("File Name: "+file.name)
-                print("Current Path: "+currentPath)
-                return file.name == currentPath
-            }
+            let index = self.files?.index { file in file.name == currentPath }
             
             if let index = index {
                 pathArray.removeFirst()
@@ -477,6 +488,27 @@ struct File: Glossy, Equatable {
             return false
         }
         
+    }
+    
+    mutating func setLocalUrl(file: File, url: URL, pathArray: [String])-> Bool {
+        var path = pathArray
+        let currentPath = path[0]
+        
+        let index = self.files?.index { file in file.name == currentPath }
+        
+        if let index = index {
+            
+            if path.count == 1 && self.files?[index].name == path[0] {
+                self.files?[index].localURL = url
+                return true
+            } else {
+                path.removeFirst()
+                return self.files![index].setLocalUrl(file: file, url: url, pathArray: path)
+            }
+        } else {
+            return false
+        }
+
     }
     
     mutating func addFile(file: File, pathArray: [String])-> Bool {
