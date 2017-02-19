@@ -49,17 +49,32 @@ extension DirectoryUI where Self: UIViewController {
         }
         else {
             displayLoadingAction(message: "Downloading file from TrustyDrive...")
-            TDFileManager.sharedInstance.download(file: file, directory: NSTemporaryDirectory()) { url in
-                let urls = [url as NSURL]
-                let qlFileHelper = QLFileUIHelper()
-                qlFileHelper.urls = urls
-                let quickLookController = QLPreviewController()
-                quickLookController.dataSource = qlFileHelper
-                quickLookController.reloadData()
-                self.dismiss(animated: true, completion: nil)
-                self.navigationController?.pushViewController(quickLookController, animated: true)
+            TDFileManager.sharedInstance.download(file: file, directory: NSTemporaryDirectory()) { url, error in
+                
+                if let url = url {
+                    let urls = [url as NSURL]
+                    let qlFileHelper = QLFileUIHelper()
+                    qlFileHelper.urls = urls
+                    let quickLookController = QLPreviewController()
+                    quickLookController.dataSource = qlFileHelper
+                    quickLookController.reloadData()
+                    self.dismiss(animated: true) {
+                        self.navigationController?.pushViewController(quickLookController, animated: true)
+                    }
+                    
+                } else if let error = error {
+                    self.dismiss(animated: true) {
+                        self.displayAlertAction(message: error.message)
+                    }
+                }
+                
             }
         }
+    }
+    
+    func displayAlertAction(message: String) {
+        //let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        
     }
     
     func displayLoadingAction(message: String) {

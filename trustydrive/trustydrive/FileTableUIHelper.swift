@@ -46,9 +46,9 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
         
     }
     
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true;
-    }
+//    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//        return true;
+//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
@@ -90,16 +90,18 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
             let downloadAction = UITableViewRowAction(style: .default, title: "Download") { action, indexPath in
                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 print(documentsDirectory)
-                TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url in
-
-                    if(TDFileManager.sharedInstance.setLocalURL(for: file, url: url, absolutePath: "\(self.delegate!.getCurrentPath())/\(file.name)")) {
-                        let cell = tableView.cellForRow(at: indexPath) as! FileCell
-                        self.files[indexPath.row].localURL = url
-                        self.delegate.files[indexPath.row].localURL = url
-                        cell.icon.image = UIImage(named: "savedFile")
+                TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url, _ in
+                    
+                    if let url = url {
+                        if(TDFileManager.sharedInstance.setLocalURL(for: file, url: url, absolutePath: "\(self.delegate!.getCurrentPath())/\(file.name)")) {
+                            let cell = tableView.cellForRow(at: indexPath) as! FileCell
+                            self.files[indexPath.row].localURL = url
+                            self.delegate.files[indexPath.row].localURL = url
+                            cell.icon.image = UIImage(named: "savedFile")
+                        }
                     }
-
                 }
+                tableView.isEditing = false
             }
 
             downloadAction.backgroundColor = UIColor(red: 20.0/255.0, green: 128.0/255.0, blue: 225.0/255.0, alpha: 1)

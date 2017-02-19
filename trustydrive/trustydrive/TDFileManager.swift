@@ -1,6 +1,10 @@
 
 import Gloss
 
+struct NetworkError {
+    let message: String
+}
+
 class TDFileManager: NSObject, TrustyDriveFileManager {
     
     static let sharedInstance = TDFileManager()
@@ -15,7 +19,7 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
         self.files = [File]()
     }
     
-    func download(file: File, directory: String, completionHandler: @escaping (URL) -> Void) {
+    func download(file: File, directory: String, completionHandler: @escaping (URL?, NetworkError?) -> Void) {
         let numberOfProviders = AccountManager.sharedInstance.accounts.count
         let chunksData = file.chunks!
         
@@ -24,6 +28,7 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
         
         // Download the chunks composing the file from the cloud providers (only Dropbox so far)
         var chunks = [[UInt8]](repeating: [UInt8](), count: chunksData.count)
+        var noError = true
         for chunk in chunksData {
             group.enter()
             let dropboxKey = chunk.account.provider.rawValue + chunk.account.email
@@ -36,12 +41,19 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
                 }
                 else if let error = error {
                     print(error)
+                    noError = false
                 }
                 group.leave()
             }
         }
         
         group.notify(queue: queue) {
+            
+            guard noError else {
+                completionHandler(nil, NetworkError(message: "Unable to download all of the chunks"))
+                return
+            }
+            
             let blockSize = chunks[0].count
             let downloadDestination = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent(file.name.components(separatedBy: ".")[0]).appendingPathExtension(file.name.components(separatedBy: ".")[1])
             let fileToDownload = OutputStream(url: downloadDestination, append: false)
@@ -64,7 +76,7 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
             fileToDownload?.close()
             
             DispatchQueue.main.async {
-                completionHandler(downloadDestination)
+                completionHandler(downloadDestination, nil)
             }
             
         }
@@ -282,7 +294,7 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
 }
 
 protocol TrustyDriveFileManager {
-    func download(file: File, directory: String, completionHandler: @escaping (URL) -> Void)
+    func download(file: File, directory: String, completionHandler: @escaping (URL?, NetworkError?) -> Void)
     func upload(fileData: Data, fileName: String, completionHandler: @escaping (File)->Void)
     func delete(file: File, completionHandler: @escaping (Bool)->Void)
 }
