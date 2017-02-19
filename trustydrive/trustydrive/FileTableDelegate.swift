@@ -34,7 +34,12 @@ class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
         case .directory:
             cell.icon.image = UIImage(named: "directory")
         default:
-            cell.icon.image = UIImage(named: "file")
+            if file.localURL != nil {
+                cell.icon.image = UIImage(named: "savedFile")
+            }
+            else {
+                cell.icon.image = UIImage(named: "file")
+            }
             
         }
         return cell
@@ -64,6 +69,7 @@ class FileTableDS: NSObject, UITableViewDataSource, UITableViewDelegate {
             FileStore.data.download(file: file, directory: documentsDirectory) { _ in
                 let cell = tableView.cellForRow(at: indexPath) as! FileCell
                 cell.icon.image = UIImage(named: "savedFile")
+                FileStore.data.files?[indexPath.row].localURL = documentsDirectory.appending("/" + file.name)
             }
         }
         

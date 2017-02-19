@@ -166,6 +166,19 @@ class AccountStore: NSObject {
                 return
             }
             FileStore.data.files = root.files
+            
+            // Check for local files on the device and assign their path to the corresponding File object
+            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            let filesOnDevice: [String] = try! FileManager.default.contentsOfDirectory(atPath: documentsDirectory)
+            for fileName in filesOnDevice {
+                let fileIndex = FileStore.data.files?.index(where: { (File) -> Bool in
+                    File.name == fileName
+                })
+                if let fileIndex = fileIndex {
+                    FileStore.data.files![fileIndex].localURL = documentsDirectory.appending("/" + fileName)
+                }
+            }
+            
             self.loginDelegate?.success(result: true)
         }
         
