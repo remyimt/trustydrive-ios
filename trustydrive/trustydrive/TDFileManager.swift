@@ -219,7 +219,7 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
         
     }
     
-    func rename(newName: String, absolutePath: String)->Bool {
+    func rename(newName: String, absolutePath: String)->Array<File>.Index? {
         var path = absolutePath.components(separatedBy: "/")
         path.removeFirst()
         
@@ -231,13 +231,13 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
             
             if path.count == 1 && self.files?[index].name == path[0]{
                 self.files?[index].name = newName
-                return true
+                return index
             } else {
                 path.removeFirst()
                 return self.files![index].rename(newName: newName, pathArray: path)
             }
         } else {
-            return false
+            return nil
         }
         
     }

@@ -39,6 +39,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="file" width="44" height="44"/>
+        <image name="file" width="50" height="50"/>
     </resources>
 </document>

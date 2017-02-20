@@ -46,10 +46,6 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
 
     }
 
-//    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//        return true;
-//    }
-
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }
@@ -82,15 +78,16 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
 
         let moreAction = UITableViewRowAction(style: .default, title: "More") { action, indexPath in
             self.delegate.displayMore(file: file)
+            tableView.isEditing = false
         }
         moreAction.backgroundColor = UIColor(red: 212.0/255.0, green: 212/255.0, blue: 212.0/255.0, alpha: 1)
         actions.append(moreAction)
 
-        if(file.type != .directory) {
+        if(file.type != .directory && file.localURL == nil) {
             let downloadAction = UITableViewRowAction(style: .default, title: "Download") { action, indexPath in
                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 print(documentsDirectory)
-                TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url, _ in
+                TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url, error in
                     
                     if let url = url {
 
@@ -107,6 +104,8 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
                             self.delegate.files[indexPath.row].localURL = url
                             cell.icon.image = UIImage(named: "savedFile")
                         }
+                    } else if let error = error {
+                        self.delegate.displayAlertAction(message: error.message)
                     }
                 }
                 tableView.isEditing = false
@@ -144,6 +143,8 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
             //self.navigationController!.pushViewController(vc, animated: true)
             delegate?.preview(file: file)
         }
+        
+        tableView.deselectRow(at: indexPath, animated: true)
         
     }
     

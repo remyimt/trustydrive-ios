@@ -124,7 +124,7 @@ struct File: Glossy, Equatable {
 
     }
 
-    mutating func rename(newName: String, pathArray: [String])-> Bool {
+    mutating func rename(newName: String, pathArray: [String])-> Array<File>.Index? {
         var path = pathArray
         let currentPath = path[0]
 
@@ -134,13 +134,13 @@ struct File: Glossy, Equatable {
 
             if path.count == 1 && self.files?[index].name == path[0]{
                 self.files?[index].name = newName
-                return true
+                return index
             } else {
                 path.removeFirst()
                 return self.files![index].rename(newName: newName, pathArray: path)
             }
         } else {
-            return false
+            return nil
         }
 
     }

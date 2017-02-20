@@ -29,6 +29,7 @@ protocol DirectoryUI: UITableViewDelegate {
     func dismissLoadingAction()
     func didChoosePhoto(fileData: Data, fileName: String)
     func doneMovingFile()
+    func displayAlertAction(message: String)
     //var tableViewDelgate: UITableViewDelegate? {get set}
 }
 
@@ -73,8 +74,15 @@ extension DirectoryUI where Self: UIViewController {
     }
     
     func displayAlertAction(message: String) {
-        //let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         
+        let alert = UIAlertController(title: message, message: nil, preferredStyle: .alert)
+        
+        let defaultAction = UIAlertAction(title: "Ok", style: .default) { _ in
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        alert.addAction(defaultAction)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func displayLoadingAction(message: String) {
@@ -135,7 +143,14 @@ extension DirectoryUI where Self: UIViewController {
         alertController.addAction(fromCameraRollAction)
         
         let fromCameraAction = UIAlertAction(title: "From camera", style: .default) { action in
-            print("create folder")
+            self.imagePickerHelper = ImagePickerUIHelper()
+            self.imagePickerHelper!.delegate = self
+            
+            let imagePickerController = UIImagePickerController()
+            imagePickerController.sourceType = .camera
+            imagePickerController.delegate = self.imagePickerHelper
+            
+            self.present(imagePickerController, animated: true, completion: nil)
         }
         
         alertController.addAction(fromCameraAction)
@@ -189,11 +204,48 @@ extension DirectoryUI where Self: UIViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    func displayRenameFileAction(file: File) {
+        let alertController = UIAlertController(title: "Rename file", message: "Please enter the new name:", preferredStyle: .alert)
+        
+        let confirmAction = UIAlertAction(title: "Confirm", style: .default) { (_) in
+            if let newName = alertController.textFields?[0].text {
+                
+                let path = self.getCurrentPath()
+                let absolutePath = "\(path)/\(file.name)"
+                
+                
+                if let index = TDFileManager.sharedInstance.rename(newName: newName, absolutePath: absolutePath) {
+                    self.displayLoadingAction(message: "Moving file...")
+                    AccountManager.sharedInstance.uploadMetadata {
+                       
+                        self.files[index].name = newName
+                        self.fileTableDataSource.files[index].name = newName
+                        self.tableView.beginUpdates()
+                        self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                        self.tableView.endUpdates()
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                }
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
+        
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Folder Name"
+        }
+        
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func displayMore(file: File) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let renameAction = UIAlertAction(title: "Rename", style: .default) { action in
-            
+            self.displayRenameFileAction(file: file)
         }
         alertController.addAction(renameAction)
         

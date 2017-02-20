@@ -11,7 +11,7 @@ import Photos
 
 class ImagePickerUIHelper: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    var delegate: DirectoryUI!
+    weak var delegate: DirectoryUI!
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let info = info[UIImagePickerControllerReferenceURL], let url = info as? URL {
@@ -25,6 +25,10 @@ class ImagePickerUIHelper: NSObject, UIImagePickerControllerDelegate, UINavigati
                     }
                 }
             }
+        } else if let image: UIImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            picker.dismiss(animated: true, completion: nil)
+            self.delegate.didChoosePhoto(fileData: UIImageJPEGRepresentation(image,1)!, fileName: "\(TDFileManager.sharedInstance.generateRandomHash(length: 6)).jpeg")
         }
     }
 }
+
