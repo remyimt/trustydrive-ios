@@ -83,13 +83,16 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
         
     }
     
-    func upload(fileData: Data, fileName: String, completionHandler: @escaping (File)->Void) {
+    func upload(fileData: Data, fileName: String, completionHandler: @escaping (File?, NetworkError?)->Void) {
         let blockSize = 500000 // 500kb blocks to chop the files
         let numberOfProviders = AccountManager.sharedInstance.accounts.count
         
         DispatchQueue.global(qos: .userInitiated).async {
             let fileToUpload = InputStream(data: fileData)
             fileToUpload.open()
+            
+            let queue = DispatchQueue(label: "upload.chunks.queue", qos: .userInitiated, attributes: .concurrent)
+            let group = DispatchGroup()
             
             // Initialize one buffer per provider
             var buffers = [[UInt8]]()
@@ -101,11 +104,13 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
             
             // Fill up the buffers reading the file byte per byte and sending them to Dropbox when the size reaches blockSize. Incomplete buffers will be filled with 0 to reach blockSize
             var tempB = [UInt8](repeating: 0, count: 1)
+            var noError = true
             while fileToUpload.hasBytesAvailable {
                 for i in 0...(blockSize*numberOfProviders - 1) { // Fill up the numberOfProviders buffers
                     fileToUpload.read(&tempB, maxLength: 1)
                     buffers[i%numberOfProviders][(i - (i % numberOfProviders))/numberOfProviders] = tempB[0]
                 }
+                
                 for i in 0...numberOfProviders - 1 { // Turn the buffers into blocks and upload them now that they have reached the blockSize
                     let bufferData = Data(bytes: buffers[i%numberOfProviders])
                     let chunkName = self.generateRandomHash(length: 40)
@@ -113,16 +118,32 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
                         AccountManager.sharedInstance.accounts[i%numberOfProviders].email
                     let client = AccountManager.sharedInstance.dropboxClients[dropboxClientKey]!
                     let randomDate = Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7))))
-                    client.files.upload(path: "/" + chunkName, clientModified: randomDate, input: bufferData)
+                    group.enter()
+                    client.files.upload(path: "/" + chunkName, clientModified: randomDate, input: bufferData).response {_, error in
+                        if let error = error {
+                            print(error)
+                            noError = false
+                        }
+                        group.leave()
+                    }
                     uploadedFile.chunks?.append(Chunk(account: AccountManager.sharedInstance.accounts[i%numberOfProviders], name: chunkName))
                 }
             }
             
             fileToUpload.close()
             
-            DispatchQueue.main.async {
-                completionHandler(uploadedFile)
+            group.notify(queue: queue) {
+                
+                guard noError else {
+                    completionHandler(nil, NetworkError(message: "Unable to upload all of the chunks"))
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    completionHandler(uploadedFile, nil)
+                }
             }
+            
         }
         
     }
@@ -145,8 +166,11 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
             }
             
             DispatchQueue.main.async {
-                if let localUrl = file.localURL {
-                    self.deleteFromDevice(url: localUrl)
+                if let localName = file.localName {
+                    let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                    let localNameComponents = localName.components(separatedBy: ".")
+                    let localURL = URL(fileURLWithPath: documentsDirectory, isDirectory: true).appendingPathComponent(localNameComponents[0]).appendingPathExtension(localNameComponents[1])
+                    self.deleteFromDevice(url: localURL)
                 }
                 completionHandler(true)
             }
@@ -268,7 +292,7 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
         return (self.remove(absolutePath: previousPath) != nil) && self.addFile(file: file, absolutePath: newPath)
     }
     
-    func setLocalURL(url: URL, absolutePath: String)-> Bool {
+    func setLocalName(localName: String, absolutePath: String)-> Bool {
         var path = absolutePath.components(separatedBy: "/")
         path.removeFirst()
         
@@ -279,22 +303,22 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
         if let index = index {
             
             if path.count == 1 && self.files?[index].name == path[0] {
-                self.files?[index].localURL = url
+                self.files?[index].localName = localName
                 return true
             } else {
                 path.removeFirst()
-                return self.files![index].setLocalUrl(url: url, pathArray: path)
+                return self.files![index].setLocalName(localName: localName, pathArray: path)
             }
         } else {
             return false
         }
-
+        
         
     }
 }
 
 protocol TrustyDriveFileManager {
     func download(file: File, directory: String, completionHandler: @escaping (URL?, NetworkError?) -> Void)
-    func upload(fileData: Data, fileName: String, completionHandler: @escaping (File)->Void)
+    func upload(fileData: Data, fileName: String, completionHandler: @escaping (File?, NetworkError?)->Void)
     func delete(file: File, completionHandler: @escaping (Bool)->Void)
 }

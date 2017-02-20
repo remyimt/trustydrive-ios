@@ -7,7 +7,7 @@ struct File: Glossy, Equatable {
     var chunks: [Chunk]?
     var absolutePath: String
     var uploadDate: Double
-    var localURL: URL?
+    var localName: String?
     var size: Int?
     var files: [File]?
 
@@ -145,7 +145,7 @@ struct File: Glossy, Equatable {
 
     }
 
-    mutating func setLocalUrl(url: URL, pathArray: [String])-> Bool {
+    mutating func setLocalName(localName: String, pathArray: [String])-> Bool {
         var path = pathArray
         let currentPath = path[0]
 
@@ -154,11 +154,11 @@ struct File: Glossy, Equatable {
         if let index = index {
 
             if path.count == 1 && self.files?[index].name == path[0] {
-                self.files?[index].localURL = url
+                self.files?[index].localName = localName
                 return true
             } else {
                 path.removeFirst()
-                return self.files![index].setLocalUrl(url: url, pathArray: path)
+                return self.files![index].setLocalName(localName: localName, pathArray: path)
             }
         } else {
             return false

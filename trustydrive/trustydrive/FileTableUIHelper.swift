@@ -34,7 +34,7 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
         case .directory:
             cell.icon.image = UIImage(named: "directory")
         default:
-            if file.localURL != nil {
+            if file.localName != nil {
                 cell.icon.image = UIImage(named: "savedFile")
             }
             else {
@@ -83,25 +83,27 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
         moreAction.backgroundColor = UIColor(red: 212.0/255.0, green: 212/255.0, blue: 212.0/255.0, alpha: 1)
         actions.append(moreAction)
 
-        if(file.type != .directory && file.localURL == nil) {
+        if(file.type != .directory && file.localName == nil) {
             let downloadAction = UITableViewRowAction(style: .default, title: "Download") { action, indexPath in
                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 print(documentsDirectory)
                 TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url, error in
                     
                     if let url = url {
+                        
+                        let lastPathComponent = url.lastPathComponent
 
                         let absolutePath = "\(self.delegate!.getCurrentPath())/\(file.name)"
 
-                        if(TDFileManager.sharedInstance.setLocalURL(url: url, absolutePath: absolutePath)) {
-                            LocalFileManager.sharedInstance.localFiles.append(LocalFile(absolutePath: absolutePath, url: url))
+                        if(TDFileManager.sharedInstance.setLocalName(localName: lastPathComponent, absolutePath: absolutePath)) {
+                            LocalFileManager.sharedInstance.localFiles.append(LocalFile(absolutePath: absolutePath, lastPathComponent: lastPathComponent))
 
                             let data = try! JSONSerialization.data(withJSONObject: LocalFileManager.sharedInstance.localFiles.toJSONArray()!, options: [])
 
                             UserDefaults.standard.set(data, forKey: "localFiles")
                             let cell = tableView.cellForRow(at: indexPath) as! FileCell
-                            self.files[indexPath.row].localURL = url
-                            self.delegate.files[indexPath.row].localURL = url
+                            self.files[indexPath.row].localName = lastPathComponent
+                            self.delegate.files[indexPath.row].localName = lastPathComponent
                             cell.icon.image = UIImage(named: "savedFile")
                         }
                     } else if let error = error {

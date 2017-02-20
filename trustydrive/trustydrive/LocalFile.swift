@@ -3,26 +3,26 @@ import Gloss
 
 struct LocalFile: Glossy {
     let absolutePath: String
-    let url: URL
+    let lastPathComponent: String
 
-    init(absolutePath: String, url: URL) {
+    init(absolutePath: String, lastPathComponent: String) {
         self.absolutePath = absolutePath
-        self.url = url
+        self.lastPathComponent = lastPathComponent
     }
     
     init?(json: JSON) {
         guard let absolutePath: String = "absolutePath" <~~ json,
-            let url: String = "url" <~~ json else {
+            let lastPathComponent: String = "lastPathComponent" <~~ json else {
                 return nil
         }
         self.absolutePath = absolutePath
-        self.url = URL(string: url)!
+        self.lastPathComponent = lastPathComponent
     }
     
     func toJSON() -> JSON? {
         return jsonify([
                 "absolutePath" ~~> self.absolutePath,
-                "url" ~~> self.url.absoluteString
+                "lastPathComponent" ~~> self.lastPathComponent
             ])
     }
 }

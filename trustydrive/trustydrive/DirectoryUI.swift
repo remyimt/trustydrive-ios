@@ -38,8 +38,11 @@ extension DirectoryUI where Self: UIViewController {
     func preview(file: File) {
         
         // Check if the file has a local url
-        if let localURL = file.localURL {
+        if let lastPathComponent = file.localName {
             displayLoadingAction(message: "Opening file...")
+            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            let localNameComponents = lastPathComponent.components(separatedBy: ".")
+            let localURL = URL(fileURLWithPath: documentsDirectory, isDirectory: true).appendingPathComponent(localNameComponents[0]).appendingPathExtension(localNameComponents[1])
             let qlFileHelper = QLFileUIHelper()
             qlFileHelper.urls = [localURL as NSURL]
             let quickLookController = QLPreviewController()
@@ -217,7 +220,7 @@ extension DirectoryUI where Self: UIViewController {
                 if let index = TDFileManager.sharedInstance.rename(newName: newName, absolutePath: absolutePath) {
                     self.displayLoadingAction(message: "Moving file...")
                     AccountManager.sharedInstance.uploadMetadata {
-                       
+                        
                         self.files[index].name = newName
                         self.fileTableDataSource.files[index].name = newName
                         self.tableView.beginUpdates()
@@ -283,21 +286,30 @@ extension DirectoryUI where Self: UIViewController {
     
     func didChoosePhoto(fileData: Data, fileName: String) {
         self.displayLoadingAction(message: "Uploading photo to TrustyDrive..")
-        TDFileManager.sharedInstance.upload(fileData: fileData, fileName: fileName) { file in
-            if TDFileManager.sharedInstance.addFile(file: file, absolutePath: self.getCurrentPath()) {
-                AccountManager.sharedInstance.uploadMetadata {
-                    self.dismissLoadingAction()
-                    self.files.append(file)
-                    self.fileTableDataSource.files.append(file)
-                    self.tableView.beginUpdates()
-                    self.tableView.insertRows(at: [IndexPath(row: self.files.count-1, section: 0)], with: .automatic)
-                    self.tableView.endUpdates()
-                    self.dismissLoadingAction()
+        TDFileManager.sharedInstance.upload(fileData: fileData, fileName: fileName) { file, error in
+            if let file = file {
+                if TDFileManager.sharedInstance.addFile(file: file, absolutePath: self.getCurrentPath()) {
+                    
+                    
+                    AccountManager.sharedInstance.uploadMetadata {
+                        self.files.append(file)
+                        self.fileTableDataSource.files.append(file)
+                        self.tableView.beginUpdates()
+                        self.tableView.insertRows(at: [IndexPath(row: self.files.count-1, section: 0)], with: .automatic)
+                        self.tableView.endUpdates()
+                        self.dismissLoadingAction()
+                    }
+                }
+                
+            } else if let error = error {
+                self.dismiss(animated: true) {
+                    self.displayAlertAction(message: error.message)
                 }
             }
+            
         }
-
+        
     }
-
+    
     
 }

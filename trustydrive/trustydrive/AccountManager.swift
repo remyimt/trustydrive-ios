@@ -181,7 +181,7 @@ class AccountManager: NSObject {
             if let localFiles = [LocalFile].from(data: json) {
                 LocalFileManager.sharedInstance.localFiles = localFiles
                 localFiles.forEach { localFile in
-                    _ = TDFileManager.sharedInstance.setLocalURL(url: localFile.url, absolutePath: localFile.absolutePath)
+                    _ = TDFileManager.sharedInstance.setLocalName(localName: localFile.lastPathComponent, absolutePath: localFile.absolutePath)
                 }
             }
         }
