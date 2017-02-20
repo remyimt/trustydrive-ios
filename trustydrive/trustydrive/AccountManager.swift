@@ -95,12 +95,13 @@ class AccountManager: NSObject {
         
         // Turn the buffers into files and upload them to the Dropbox accounts
         for buffer in buffers {
-            group.enter()
+            
             let bufferIndex = buffers.index(where: { (Buffer) -> Bool in
                 Buffer == buffer
             })!
             let chunk = Data(bytes: buffer)
             let dropboxKey = self.accounts[bufferIndex].provider.rawValue + self.accounts[bufferIndex].email
+            group.enter()
             dropboxClients[dropboxKey]?.files.upload(path: "/" + self.accounts[bufferIndex].metadataName!, mode: .overwrite, clientModified: Date(timeIntervalSinceNow: -Double(arc4random_uniform(UInt32(3.154e+7)))), input: chunk)
                 .response { response, error in
                     if let response = response {
@@ -108,9 +109,9 @@ class AccountManager: NSObject {
                     } else if let error = error {
                         print(error)
                     }
+                    group.leave()
             }
             
-            group.leave()
         }
         
         group.notify(queue: queue) {

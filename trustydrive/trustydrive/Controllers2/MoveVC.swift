@@ -38,7 +38,6 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         print("The file to move: \(self.file)")
         print("With absolute path: \(newPath)")
         
-        //TODO Call Move, update meta and dismiss on callback
         let loadingController = self.displayLoadingAction(message: "Moving file")
         if TDFileManager.sharedInstance.move(file: self.file, previousPath: "\(self.previousAbsolutePath!)/\(self.file.name)", newPath: newPath) {
             AccountManager.sharedInstance.uploadMetadata {

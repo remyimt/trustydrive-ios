@@ -166,21 +166,11 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
             }
             
             DispatchQueue.main.async {
-                if let localName = file.localName {
-                    let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-                    let localNameComponents = localName.components(separatedBy: ".")
-                    let localURL = URL(fileURLWithPath: documentsDirectory, isDirectory: true).appendingPathComponent(localNameComponents[0]).appendingPathExtension(localNameComponents[1])
-                    self.deleteFromDevice(url: localURL)
-                }
                 completionHandler(true)
             }
             
         }
         
-    }
-    
-    func deleteFromDevice(url: URL) {
-        try! FileManager.default.removeItem(at: url)
     }
     
     func generateRandomHash(length:Int) -> String {
@@ -289,7 +279,20 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
     }
     
     func move(file: File, previousPath: String, newPath: String)->Bool {
+        self.updateLocalFileNames(file: file, previousPath: previousPath, newPath: newPath)
         return (self.remove(absolutePath: previousPath) != nil) && self.addFile(file: file, absolutePath: newPath)
+    }
+    
+    func updateLocalFileNames(file: File, previousPath: String, newPath: String) {
+        
+        if(file.localName != nil) {
+            LocalFileManager.sharedInstance.update(previousPath: "\(previousPath)", newPath: "\(newPath)/\(file.name)")
+        }
+        
+        file.files?.forEach { currentFile in
+            self.updateLocalFileNames(file: currentFile, previousPath: "\(previousPath)/\(currentFile.name)", newPath: "\(newPath)/\(file.name)")
+        }
+        
     }
     
     func setLocalName(localName: String, absolutePath: String)-> Bool {

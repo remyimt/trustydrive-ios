@@ -60,10 +60,16 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
             let file = self.files[indexPath.row]
 
             let path: String = self.delegate!.getCurrentPath()
+            let absolutePath = "\(path)/\(file.name)"
 
             TDFileManager.sharedInstance.delete(file: file) { _ in
-                if let _ = TDFileManager.sharedInstance.remove(absolutePath: "\(path)/\(file.name)") {
+                if let file = TDFileManager.sharedInstance.remove(absolutePath: absolutePath) {
                     self.delegate!.displayLoadingAction(message: "Deleting file..")
+                    
+                    if file.localName != nil {
+                        LocalFileManager.sharedInstance.remove(absolutePath: absolutePath)
+                    }
+                    
                     AccountManager.sharedInstance.uploadMetadata {
                         self.files.remove(at: indexPath.row)
                         self.delegate!.files.remove(at: indexPath.row)
@@ -97,10 +103,7 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
 
                         if(TDFileManager.sharedInstance.setLocalName(localName: lastPathComponent, absolutePath: absolutePath)) {
                             LocalFileManager.sharedInstance.localFiles.append(LocalFile(absolutePath: absolutePath, lastPathComponent: lastPathComponent))
-
-                            let data = try! JSONSerialization.data(withJSONObject: LocalFileManager.sharedInstance.localFiles.toJSONArray()!, options: [])
-
-                            UserDefaults.standard.set(data, forKey: "localFiles")
+                            LocalFileManager.sharedInstance.saveToUserDefaults()
                             let cell = tableView.cellForRow(at: indexPath) as! FileCell
                             self.files[indexPath.row].localName = lastPathComponent
                             self.delegate.files[indexPath.row].localName = lastPathComponent

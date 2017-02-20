@@ -40,9 +40,7 @@ extension DirectoryUI where Self: UIViewController {
         // Check if the file has a local url
         if let lastPathComponent = file.localName {
             displayLoadingAction(message: "Opening file...")
-            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            let localNameComponents = lastPathComponent.components(separatedBy: ".")
-            let localURL = URL(fileURLWithPath: documentsDirectory, isDirectory: true).appendingPathComponent(localNameComponents[0]).appendingPathExtension(localNameComponents[1])
+            let localURL = LocalFileManager.sharedInstance.runtimeDocumentsURL(for: lastPathComponent)
             let qlFileHelper = QLFileUIHelper()
             qlFileHelper.urls = [localURL as NSURL]
             let quickLookController = QLPreviewController()
@@ -220,12 +218,15 @@ extension DirectoryUI where Self: UIViewController {
                 if let index = TDFileManager.sharedInstance.rename(newName: newName, absolutePath: absolutePath) {
                     self.displayLoadingAction(message: "Moving file...")
                     AccountManager.sharedInstance.uploadMetadata {
-                        
+                        let oldName = self.files[index].name
                         self.files[index].name = newName
                         self.fileTableDataSource.files[index].name = newName
                         self.tableView.beginUpdates()
                         self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                         self.tableView.endUpdates()
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            TDFileManager.sharedInstance.updateLocalFileNames(file: self.files[index], previousPath: "\(path)/\(oldName)", newPath: "\(path)")
+                        }
                         self.dismiss(animated: true, completion: nil)
                     }
                 }

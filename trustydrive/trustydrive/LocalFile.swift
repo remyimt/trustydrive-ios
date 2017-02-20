@@ -2,7 +2,7 @@
 import Gloss
 
 struct LocalFile: Glossy {
-    let absolutePath: String
+    var absolutePath: String
     let lastPathComponent: String
 
     init(absolutePath: String, lastPathComponent: String) {
