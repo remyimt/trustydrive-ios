@@ -80,6 +80,7 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProviderCell")!
         cell.textLabel?.text = token.email
+        cell.detailTextLabel?.text = token.provider.rawValue
         
         
         return cell
