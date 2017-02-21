@@ -295,7 +295,7 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
         
     }
     
-    func setLocalName(localName: String, absolutePath: String)-> Bool {
+    func setLocalName(localName: String?, absolutePath: String)-> Array<File>.Index? {
         var path = absolutePath.components(separatedBy: "/")
         path.removeFirst()
         
@@ -307,13 +307,13 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
             
             if path.count == 1 && self.files?[index].name == path[0] {
                 self.files?[index].localName = localName
-                return true
+                return index
             } else {
                 path.removeFirst()
                 return self.files![index].setLocalName(localName: localName, pathArray: path)
             }
         } else {
-            return false
+            return nil
         }
         
         

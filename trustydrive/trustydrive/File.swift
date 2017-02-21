@@ -145,7 +145,7 @@ struct File: Glossy, Equatable {
 
     }
 
-    mutating func setLocalName(localName: String, pathArray: [String])-> Bool {
+    mutating func setLocalName(localName: String?, pathArray: [String])-> Array<File>.Index? {
         var path = pathArray
         let currentPath = path[0]
 
@@ -155,13 +155,13 @@ struct File: Glossy, Equatable {
 
             if path.count == 1 && self.files?[index].name == path[0] {
                 self.files?[index].localName = localName
-                return true
+                return index
             } else {
                 path.removeFirst()
                 return self.files![index].setLocalName(localName: localName, pathArray: path)
             }
         } else {
-            return false
+            return nil
         }
 
     }

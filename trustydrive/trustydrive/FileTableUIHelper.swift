@@ -93,15 +93,16 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
             let downloadAction = UITableViewRowAction(style: .default, title: "Download") { action, indexPath in
                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 print(documentsDirectory)
+                self.delegate.displayLoadingAction(message: "Saving file from TrustryDrive...")
                 TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url, error in
-                    
+                    self.delegate.dismissLoadingAction()
                     if let url = url {
                         
                         let lastPathComponent = url.lastPathComponent
 
                         let absolutePath = "\(self.delegate!.getCurrentPath())/\(file.name)"
 
-                        if(TDFileManager.sharedInstance.setLocalName(localName: lastPathComponent, absolutePath: absolutePath)) {
+                        if(TDFileManager.sharedInstance.setLocalName(localName: lastPathComponent, absolutePath: absolutePath) != nil) {
                             LocalFileManager.sharedInstance.localFiles.append(LocalFile(absolutePath: absolutePath, lastPathComponent: lastPathComponent))
                             LocalFileManager.sharedInstance.saveToUserDefaults()
                             let cell = tableView.cellForRow(at: indexPath) as! FileCell

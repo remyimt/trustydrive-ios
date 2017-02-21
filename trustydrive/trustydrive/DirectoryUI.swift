@@ -259,6 +259,23 @@ extension DirectoryUI where Self: UIViewController {
         }
         alertController.addAction(moveAction)
         
+        if file.localName != nil {
+            let removeFromDeviceAction = UIAlertAction(title: "Remove from device", style: .default) { action in
+                let absolutePath = "\(self.getCurrentPath())/\(file.name)"
+                
+                if let index = TDFileManager.sharedInstance.setLocalName(localName: nil, absolutePath: absolutePath) {
+                    LocalFileManager.sharedInstance.remove(absolutePath: absolutePath)
+                    self.files[index].localName = nil
+                    self.fileTableDataSource.files[index].localName = nil
+                    self.tableView.beginUpdates()
+                    self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                    self.tableView.endUpdates()
+                }
+                
+            }
+            alertController.addAction(removeFromDeviceAction)
+        }
+        
         let infoAction = UIAlertAction(title: "View info", style: .default) { action in
             
         }

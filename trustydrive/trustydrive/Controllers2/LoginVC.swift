@@ -91,6 +91,15 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
         return true
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if loginBtn.isEnabled {
+            self.dismiss()
+            return true
+        } else {
+            return false
+        }
+    }
+    
     private func checkButtonState(string: String) {
         if string.characters.count > 0 && AccountManager.sharedInstance.accounts.count > 0{
             self.loginBtn.isEnabled = true
