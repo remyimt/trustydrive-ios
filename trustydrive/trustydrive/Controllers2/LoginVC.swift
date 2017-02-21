@@ -94,10 +94,13 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if loginBtn.isEnabled {
             self.dismiss()
+            textField.resignFirstResponder()
             return true
         } else {
+            textField.resignFirstResponder()
             return false
         }
+        
     }
     
     private func checkButtonState(string: String) {
