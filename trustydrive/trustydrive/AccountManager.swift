@@ -10,12 +10,12 @@ import Gloss
 import SwiftyDropbox
 import CryptoSwift
 
-protocol AccountStoreDelgate {
+protocol AccountStoreDelgate: class {
     func willFetch()
     func didChange(accounts: [Account])
 }
 
-protocol LoginDelegate {
+protocol LoginDelegate: class {
     func willStart()
     func success(result: Bool)
 }
@@ -27,7 +27,7 @@ class AccountManager: NSObject {
     var accounts = [Account]()
     var dropboxClients = [String:DropboxClient]()
     var accountStoreDelegate: AccountStoreDelgate?
-    var loginDelegate: LoginDelegate?
+    weak var loginDelegate: LoginDelegate?
     
     
     func login(password: String) {

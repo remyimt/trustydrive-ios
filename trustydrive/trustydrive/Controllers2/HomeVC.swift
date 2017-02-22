@@ -37,7 +37,7 @@ class HomeVC: UIViewController, DirectoryUI {
         if let files = TDFileManager.sharedInstance.files {
             self.files = files
             
-            self.fileTableDataSource = FileTableUIHelper(files: self.files!)
+            self.fileTableDataSource = FileTableUIHelper()
             self.fileTableDataSource.delegate = self
             
             tableView!.dataSource = self.fileTableDataSource

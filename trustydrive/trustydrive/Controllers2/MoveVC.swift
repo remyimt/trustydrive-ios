@@ -20,13 +20,14 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "FileCell", bundle: nil), forCellReuseIdentifier: "FileCell")
+        
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.reloadData()
     }
     
     @IBAction func cancel() {

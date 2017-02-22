@@ -82,6 +82,26 @@ struct File: Glossy, Equatable {
         return false
 
     }
+    
+    func getFile(at absolutePath: [String])->File? {
+        
+        var path = absolutePath
+        let currentPath = path[0]
+        
+        let index = self.files?.index { file in file.name == currentPath }
+        
+        if let index = index {
+            if path.count == 1 {
+                return self.files?[index]
+            }
+            path.removeFirst()
+            return self.files?[index].getFile(at: path)
+            
+        }
+        
+        return nil
+        
+    }
 
     mutating func removeFile(absolutePath: [String])-> File? {
 

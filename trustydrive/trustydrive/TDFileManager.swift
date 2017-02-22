@@ -19,6 +19,27 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
         self.files = [File]()
     }
     
+    func getFile(at absolutePath: String)->File? {
+        var path = absolutePath.components(separatedBy: "/")
+        path.removeFirst()
+        
+        let currentPath = path[0]
+        
+        let index = self.files?.index { file in file.name == currentPath}
+        
+        if let index = index {
+            if path.count == 1 {
+                return self.files?[index]
+            }
+            path.removeFirst()
+            return self.files?[index].getFile(at: path)
+            
+        }
+        
+        return nil
+        
+    }
+    
     func download(file: File, directory: String, completionHandler: @escaping (URL?, NetworkError?) -> Void) {
         let numberOfProviders = AccountManager.sharedInstance.accounts.count
         let chunksData = file.chunks!

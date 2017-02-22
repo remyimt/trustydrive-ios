@@ -16,13 +16,13 @@ class SettingsVC: UIViewController, UITableViewDataSource, AccountStoreDelgate {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadingEmail.hidesWhenStopped = true
+        tableView.dataSource = self
+        AccountManager.sharedInstance.accountStoreDelegate = self
+        self.tableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tableView.dataSource = self
-        AccountManager.sharedInstance.accountStoreDelegate = self
-        self.tableView.reloadData()
     }
     
     @IBAction func logout() {

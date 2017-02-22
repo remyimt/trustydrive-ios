@@ -10,20 +10,15 @@ import UIKit
 
 class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
 
-    var files: [File]
-    var delegate: DirectoryUI!
-
-    init(files: [File]) {
-        self.files = files
-    }
+    weak var delegate: DirectoryUI!
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.files.count
+        return self.delegate.files.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let file = self.files[indexPath.row]
+        let file = self.delegate.files[indexPath.row]
 
         let cell: FileCell = tableView.dequeueReusableCell(withIdentifier: "FileCell") as! FileCell
 
@@ -54,10 +49,10 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
 
         var actions = [UITableViewRowAction]()
 
-        let file = self.files[indexPath.row]
+        let file = self.delegate.files[indexPath.row]
 
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { action, indexPath in
-            let file = self.files[indexPath.row]
+            let file = self.delegate.files[indexPath.row]
 
             let path: String = self.delegate!.getCurrentPath()
             let absolutePath = "\(path)/\(file.name)"
@@ -71,7 +66,6 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
                     }
                     
                     AccountManager.sharedInstance.uploadMetadata {
-                        self.files.remove(at: indexPath.row)
                         self.delegate!.files.remove(at: indexPath.row)
                         tableView.deleteRows(at: [indexPath], with: .fade)
                         self.delegate!.dismissLoadingAction()
@@ -106,7 +100,6 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
                             LocalFileManager.sharedInstance.localFiles.append(LocalFile(absolutePath: absolutePath, lastPathComponent: lastPathComponent))
                             LocalFileManager.sharedInstance.saveToUserDefaults()
                             let cell = tableView.cellForRow(at: indexPath) as! FileCell
-                            self.files[indexPath.row].localName = lastPathComponent
                             self.delegate.files[indexPath.row].localName = lastPathComponent
                             cell.icon.image = UIImage(named: "savedFile")
                         }
@@ -129,7 +122,7 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let file = files[indexPath.row]
+        let file = self.delegate.files[indexPath.row]
         
         switch file.type {
         case .file:

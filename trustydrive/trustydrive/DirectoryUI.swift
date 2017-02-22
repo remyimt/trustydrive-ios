@@ -101,8 +101,7 @@ extension DirectoryUI where Self: UIViewController {
     
     func openDirectory(file: File) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "DirectoryVC") as! DirectoryVC
-        vc.file = file
-        vc.files = file.files!
+        vc.navigationItem.title = file.name
         self.navigationController!.pushViewController(vc, animated: true)
     }
     
@@ -183,7 +182,6 @@ extension DirectoryUI where Self: UIViewController {
                     self.displayLoadingAction(message: "Creating Folder...")
                     AccountManager.sharedInstance.uploadMetadata {
                         self.files.append(file)
-                        self.fileTableDataSource.files.append(file)
                         self.tableView.beginUpdates()
                         self.tableView.insertRows(at: [IndexPath(row: self.files.count-1, section: 0)], with: .automatic)
                         self.tableView.endUpdates()
@@ -220,7 +218,6 @@ extension DirectoryUI where Self: UIViewController {
                     AccountManager.sharedInstance.uploadMetadata {
                         let oldName = self.files[index].name
                         self.files[index].name = newName
-                        self.fileTableDataSource.files[index].name = newName
                         self.tableView.beginUpdates()
                         self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                         self.tableView.endUpdates()
@@ -266,7 +263,6 @@ extension DirectoryUI where Self: UIViewController {
                 if let index = TDFileManager.sharedInstance.setLocalName(localName: nil, absolutePath: absolutePath) {
                     LocalFileManager.sharedInstance.remove(absolutePath: absolutePath)
                     self.files[index].localName = nil
-                    self.fileTableDataSource.files[index].localName = nil
                     self.tableView.beginUpdates()
                     self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                     self.tableView.endUpdates()
@@ -311,7 +307,6 @@ extension DirectoryUI where Self: UIViewController {
                     
                     AccountManager.sharedInstance.uploadMetadata {
                         self.files.append(file)
-                        self.fileTableDataSource.files.append(file)
                         self.tableView.beginUpdates()
                         self.tableView.insertRows(at: [IndexPath(row: self.files.count-1, section: 0)], with: .automatic)
                         self.tableView.endUpdates()

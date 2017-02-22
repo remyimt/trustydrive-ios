@@ -25,9 +25,10 @@ class DirectoryVC: UIViewController, DirectoryUI {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "FileCell", bundle: nil), forCellReuseIdentifier: "FileCell")
         
-        self.navigationItem.title = file!.name
+        self.file = TDFileManager.sharedInstance.getFile(at: self.getCurrentPath())
+        self.files = file!.files
         
-        self.fileTableDataSource = FileTableUIHelper(files: files!)
+        self.fileTableDataSource = FileTableUIHelper()
         self.fileTableDataSource.delegate = self
         tableView!.dataSource = self.fileTableDataSource
         tableView!.delegate = self.fileTableDataSource

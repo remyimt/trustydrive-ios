@@ -24,15 +24,15 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
         super.viewDidLoad()
         loadingEmail.hidesWhenStopped = true
         loadingSignIn.hidesWhenStopped = true
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         tableView.dataSource = self
         passwordTxt.delegate = self
         AccountManager.sharedInstance.accountStoreDelegate = self
         AccountManager.sharedInstance.loginDelegate = self
         self.tableView.reloadData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
 
     override func didReceiveMemoryWarning() {
