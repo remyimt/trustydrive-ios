@@ -1,11 +1,9 @@
-
 import Gloss
 
 struct File: Glossy, Equatable {
     var name: String
     let type: FileType
     var chunks: [Chunk]?
-    var absolutePath: String
     var uploadDate: Double
     var localName: String?
     var size: Int?
@@ -21,7 +19,6 @@ struct File: Glossy, Equatable {
         self.name = name
         self.type = type
         self.chunks = chunks
-        self.absolutePath = absolutePath
         self.uploadDate = uploadDate
         self.size = size
         self.files = files
@@ -30,14 +27,12 @@ struct File: Glossy, Equatable {
     init?(json: JSON) {
         guard let name: String = "name" <~~ json,
               let type: String = "type" <~~ json,
-              let absolutePath: String = "absolutePath" <~~ json,
               let uploadDate: Double = "uploadDate" <~~ json else {
             return nil
         }
 
         self.name = name
         self.type = File.FileType(rawValue: type)!
-        self.absolutePath = absolutePath
         self.uploadDate = uploadDate
 
         if let size: Int = "size" <~~ json, let chunks: [Chunk] = "chunks" <~~ json {
@@ -54,7 +49,6 @@ struct File: Glossy, Equatable {
                 "name" ~~> self.name,
                 "type" ~~> self.type,
                 "chunks" ~~> self.chunks,
-                "absolutePath" ~~> self.absolutePath,
                 "uploadDate" ~~> self.uploadDate,
                 "size" ~~> self.size,
                 "files" ~~> self.files,

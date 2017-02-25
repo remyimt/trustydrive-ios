@@ -1,4 +1,3 @@
-
 import Gloss
 
 struct NetworkError {
@@ -209,11 +208,7 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
         let currentPath = path[0]
         
         //Get the matching current directory
-        let index = self.files?.index { file in
-            print("File Name: "+file.name)
-            print("Current Path: "+currentPath)
-            return file.name == currentPath
-        }
+        let index = self.files?.index { file in file.name == currentPath }
         
         if let index = index {
             if path.count == 1 {
@@ -238,11 +233,7 @@ class TDFileManager: NSObject, TrustyDriveFileManager {
             self.files?.append(file)
             return file
         } else {
-            let index = self.files?.index { file in
-                print("File Name: "+file.name)
-                print("Current Path: "+currentPath)
-                return file.name == currentPath
-            }
+            let index = self.files?.index { file in file.name == currentPath }
             
             if let index = index {
                 path.removeFirst()

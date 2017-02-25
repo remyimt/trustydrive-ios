@@ -1,11 +1,3 @@
-//
-//  LoginVC.swift
-//  modal-experiment
-//
-//  Created by Sebastian on 05/02/2017.
-//  Copyright © 2017 SS Developing. All rights reserved.
-//
-
 import UIKit
 import SwiftyDropbox
 
@@ -44,8 +36,20 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
         AccountManager.sharedInstance.login(password: passwordTxt.text!)
     }
     
+    private func checkButtonState(string: String) {
+        if string.characters.count > 0 && AccountManager.sharedInstance.accounts.count > 0{
+            self.loginBtn.isEnabled = true
+            self.loginBtn.alpha = 1
+            
+        } else {
+            self.loginBtn.isEnabled = false
+            self.loginBtn.alpha = 0.5
+            
+        }
+    }
     
-    //TokenStoreDelegate
+    
+    //TokenStoreDelegate protocol
     
     func willFetch() {
         self.loadingEmail.startAnimating()
@@ -69,7 +73,7 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
         }
     }
     
-    //UITableViewDataSource Protocol
+    //UITableViewDataSource protocol
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return AccountManager.sharedInstance.accounts.count
@@ -103,17 +107,4 @@ class LoginVC: UIViewController, UITableViewDataSource, UITextFieldDelegate, Acc
         
     }
     
-    private func checkButtonState(string: String) {
-        if string.characters.count > 0 && AccountManager.sharedInstance.accounts.count > 0{
-            self.loginBtn.isEnabled = true
-            self.loginBtn.alpha = 1
-            
-        } else {
-            self.loginBtn.isEnabled = false
-            self.loginBtn.alpha = 0.5
-            
-        }
-    }
-    
-
 }

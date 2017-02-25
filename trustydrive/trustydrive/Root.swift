@@ -1,4 +1,3 @@
-
 import Gloss
 
 struct Root: Glossy {

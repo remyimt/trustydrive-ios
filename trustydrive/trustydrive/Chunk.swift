@@ -1,4 +1,3 @@
-
 import Gloss
 
 struct Chunk: Glossy, Equatable {

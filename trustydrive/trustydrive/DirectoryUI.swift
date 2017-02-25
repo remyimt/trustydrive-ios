@@ -1,24 +1,13 @@
-//
-//  DirectoryUI.swift
-//  trustydrive
-//
-//  Created by Sebastian on 14/02/2017.
-//  Copyright © 2017 SS Developing. All rights reserved.
-//
-
 import UIKit
 import Photos
 import QuickLook
 
 protocol DirectoryUI: UITableViewDelegate {
-    //var urls: [NSURL] {get set}
     var file: File? {get set}
     var files: [File]! {get set}
-    //var quickLookController: QLPreviewController {get}
     var imagePickerHelper: ImagePickerUIHelper? {get set}
     weak var tableView: UITableView! {get set}
-    var fileTableDataSource: FileTableUIHelper! {get set}
-    //var qlFileHelper: QLFileHelper? {get set}
+    var fileTableUIHelper: FileTableUIHelper! {get set}
     func displayActionSheet()
     func displayImportFileActionSheet()
     func displayMore(file: File)
@@ -30,7 +19,6 @@ protocol DirectoryUI: UITableViewDelegate {
     func didChoosePhoto(fileData: Data, fileName: String)
     func doneMovingFile()
     func displayAlertAction(message: String)
-    //var tableViewDelgate: UITableViewDelegate? {get set}
 }
 
 extension DirectoryUI where Self: UIViewController {
@@ -156,7 +144,7 @@ extension DirectoryUI where Self: UIViewController {
         alertController.addAction(fromCameraAction)
         
         let importAction = UIAlertAction(title: "Import ...", style: .default) { action in
-            print("create folder")
+           
         }
         
         alertController.addAction(importAction)
@@ -251,7 +239,6 @@ extension DirectoryUI where Self: UIViewController {
         alertController.addAction(renameAction)
         
         let moveAction = UIAlertAction(title: "Move", style: .default) { action in
-            print(self)
             self.performSegue(withIdentifier: "showMove", sender: file)
         }
         alertController.addAction(moveAction)

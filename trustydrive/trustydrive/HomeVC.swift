@@ -1,11 +1,3 @@
-//
-//  HomeVV.swift
-//  modal-experiment
-//
-//  Created by Sebastian on 07/02/2017.
-//  Copyright © 2017 SS Developing. All rights reserved.
-//
-
 import UIKit
 import QuickLook
 import Photos
@@ -13,14 +5,11 @@ import Photos
 class HomeVC: UIViewController, DirectoryUI {
     
     var imagePickerHelper: ImagePickerUIHelper?
-    //var qlFileHelper: QLFileHelper?
     var file: File?
     var files: [File]!
-    var fileTableDataSource: FileTableUIHelper!
+    var fileTableUIHelper: FileTableUIHelper!
     var urls = [NSURL]()
     @IBOutlet weak var tableView: UITableView!
-    //let quickLookController = QLPreviewController()
-    //var tableViewDelgate: UITableViewDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,11 +26,11 @@ class HomeVC: UIViewController, DirectoryUI {
         if let files = TDFileManager.sharedInstance.files {
             self.files = files
             
-            self.fileTableDataSource = FileTableUIHelper()
-            self.fileTableDataSource.delegate = self
+            self.fileTableUIHelper = FileTableUIHelper()
+            self.fileTableUIHelper.delegate = self
             
-            tableView!.dataSource = self.fileTableDataSource
-            tableView!.delegate = self.fileTableDataSource
+            tableView!.dataSource = self.fileTableUIHelper
+            tableView!.delegate = self.fileTableUIHelper
             tableView!.reloadData()
         }
         self.imagePickerHelper = ImagePickerUIHelper()

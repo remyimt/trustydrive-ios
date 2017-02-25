@@ -1,11 +1,3 @@
-//
-//  FileTableDS.swift
-//  modal-experiment
-//
-//  Created by Sebastian on 07/02/2017.
-//  Copyright © 2017 SS Developing. All rights reserved.
-//
-
 import UIKit
 
 class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
@@ -86,7 +78,7 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
         if(file.type != .directory && file.localName == nil) {
             let downloadAction = UITableViewRowAction(style: .default, title: "Download") { action, indexPath in
                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-                print(documentsDirectory)
+                print("The current documents directory is: \(documentsDirectory)")
                 self.delegate.displayLoadingAction(message: "Saving file from TrustryDrive...")
                 TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url, error in
                     self.delegate.dismissLoadingAction()
@@ -126,20 +118,10 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
         
         switch file.type {
         case .file:
-            //let vc = self.delegate?.instantiateViewController(withIdentifier: "FileVC") as! FileVC
-            //vc.file = file
-            //self.navigationController!.pushViewController(vc, animated: true)
             delegate?.preview(file: file)
         case.directory:
-            //let vc = self.delegate?.instantiateViewController(withIdentifier: "DirectoryVC") as! DirectoryVC
-            //vc.file = file
-            //vc.files = file.files!
-            //self.navigationController!.pushViewController(vc, animated: true)
             delegate?.openDirectory(file: file)
         case.image:
-            //let vc = self.storyboard!.instantiateViewController(withIdentifier: "FileVC") as! FileVC
-            //vc.file = file
-            //self.navigationController!.pushViewController(vc, animated: true)
             delegate?.preview(file: file)
         }
         

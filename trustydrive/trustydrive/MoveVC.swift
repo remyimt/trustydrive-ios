@@ -1,11 +1,3 @@
-//
-//  MoveVC.swift
-//  trustydrive
-//
-//  Created by Sebastian on 15/02/2017.
-//  Copyright © 2017 SS Developing. All rights reserved.
-//
-
 import UIKit
 
 class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -36,9 +28,7 @@ class MoveVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBAction func done() {
         let newPath = self.navigationController!.viewControllers.map { controller in controller.navigationItem.title! }.joined(separator: "/")
-        print("The file to move: \(self.file)")
-        print("With absolute path: \(newPath)")
-        
+    
         let loadingController = self.displayLoadingAction(message: "Moving file")
         if TDFileManager.sharedInstance.move(file: self.file, previousPath: "\(self.previousAbsolutePath!)/\(self.file.name)", newPath: newPath) {
             AccountManager.sharedInstance.uploadMetadata {

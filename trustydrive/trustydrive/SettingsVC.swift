@@ -1,11 +1,3 @@
-//
-//  SettingsVC.swift
-//  trustydrive
-//
-//  Created by Sebastian on 14/02/2017.
-//  Copyright © 2017 SS Developing. All rights reserved.
-//
-
 import UIKit
 
 class SettingsVC: UIViewController, UITableViewDataSource, AccountStoreDelgate {
@@ -30,6 +22,8 @@ class SettingsVC: UIViewController, UITableViewDataSource, AccountStoreDelgate {
         _ = self.navigationController?.popViewController(animated: true)
     }
     
+    //AccountStoreDelegate protocol
+    
     func willFetch() {
         self.loadingEmail.startAnimating()
     }
@@ -38,6 +32,8 @@ class SettingsVC: UIViewController, UITableViewDataSource, AccountStoreDelgate {
         self.tableView.reloadData()
         self.loadingEmail.stopAnimating()
     }
+    
+    //UITableViewDataSource protocol
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return AccountManager.sharedInstance.accounts.count

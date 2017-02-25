@@ -1,25 +1,14 @@
-//
-//  DirectoryVC.swift
-//  modal-experiment
-//
-//  Created by Sebastian on 07/02/2017.
-//  Copyright © 2017 SS Developing. All rights reserved.
-//
-
 import UIKit
 import QuickLook
 
 class DirectoryVC: UIViewController, DirectoryUI {
     
-    //let quickLookController = QLPreviewController()
     var urls = [NSURL]()
     var imagePickerHelper: ImagePickerUIHelper?
-    //var qlFileHelper: QLFileHelper?
     var file: File?
     var files: [File]!
-    var fileTableDataSource: FileTableUIHelper!
+    var fileTableUIHelper: FileTableUIHelper!
     @IBOutlet weak var tableView: UITableView!
-    //var tableViewDelgate: UITableViewDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,10 +17,10 @@ class DirectoryVC: UIViewController, DirectoryUI {
         self.file = TDFileManager.sharedInstance.getFile(at: self.getCurrentPath())
         self.files = file!.files
         
-        self.fileTableDataSource = FileTableUIHelper()
-        self.fileTableDataSource.delegate = self
-        tableView!.dataSource = self.fileTableDataSource
-        tableView!.delegate = self.fileTableDataSource
+        self.fileTableUIHelper = FileTableUIHelper()
+        self.fileTableUIHelper.delegate = self
+        tableView!.dataSource = self.fileTableUIHelper
+        tableView!.delegate = self.fileTableUIHelper
         self.imagePickerHelper = ImagePickerUIHelper()
         
     }

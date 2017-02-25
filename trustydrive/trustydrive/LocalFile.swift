@@ -1,4 +1,3 @@
-
 import Gloss
 
 struct LocalFile: Glossy {
