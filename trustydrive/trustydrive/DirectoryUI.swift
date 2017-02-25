@@ -39,7 +39,7 @@ extension DirectoryUI where Self: UIViewController {
         }
         else {
             displayLoadingAction(message: "Downloading file from TrustyDrive...")
-            TDFileManager.sharedInstance.download(file: file, directory: NSTemporaryDirectory()) { url, error in
+            TDProviderAPIManager.sharedInstance.download(file: file, directory: NSTemporaryDirectory()) { url, error in
                 
                 if let url = url {
                     let urls = [url as NSURL]
@@ -287,7 +287,7 @@ extension DirectoryUI where Self: UIViewController {
     
     func didChoosePhoto(fileData: Data, fileName: String) {
         self.displayLoadingAction(message: "Uploading photo to TrustyDrive..")
-        TDFileManager.sharedInstance.upload(fileData: fileData, fileName: fileName) { file, error in
+        TDProviderAPIManager.sharedInstance.upload(fileData: fileData, fileName: fileName) { file, error in
             if let file = file {
                 if TDFileManager.sharedInstance.addFile(file: file, absolutePath: self.getCurrentPath()) {
                     

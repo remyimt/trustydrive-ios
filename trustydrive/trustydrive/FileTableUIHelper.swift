@@ -49,7 +49,7 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
             let path: String = self.delegate!.getCurrentPath()
             let absolutePath = "\(path)/\(file.name)"
 
-            TDFileManager.sharedInstance.delete(file: file) { _ in
+            TDProviderAPIManager.sharedInstance.delete(file: file) { _ in
                 if let file = TDFileManager.sharedInstance.remove(absolutePath: absolutePath) {
                     self.delegate!.displayLoadingAction(message: "Deleting file..")
                     
@@ -80,7 +80,7 @@ class FileTableUIHelper: NSObject, UITableViewDataSource, UITableViewDelegate {
                 let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 print("The current documents directory is: \(documentsDirectory)")
                 self.delegate.displayLoadingAction(message: "Saving file from TrustryDrive...")
-                TDFileManager.sharedInstance.download(file: file, directory: documentsDirectory) { url, error in
+                TDProviderAPIManager.sharedInstance.download(file: file, directory: documentsDirectory) { url, error in
                     self.delegate.dismissLoadingAction()
                     if let url = url {
                         

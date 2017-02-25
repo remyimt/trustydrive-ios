@@ -19,7 +19,7 @@ class ImagePickerUIHelper: NSObject, UIImagePickerControllerDelegate, UINavigati
             }
         } else if let image: UIImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             picker.dismiss(animated: true, completion: nil)
-            self.delegate.didChoosePhoto(fileData: UIImageJPEGRepresentation(image,1)!, fileName: "\(TDFileManager.sharedInstance.generateRandomHash(length: 6)).jpeg")
+            self.delegate.didChoosePhoto(fileData: UIImageJPEGRepresentation(image,1)!, fileName: "\(CommonManager.sharedInstance.generateRandomHash(length: 6)).jpeg")
         }
     }
 }
